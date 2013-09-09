@@ -1,137 +1,81 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-
 <head>
-<title>ERGO Home</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="format-detection" content="telephone=no" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
-<!-- ### Reference CSS files required -->
-<link href="css/jquery.mobile/jquery.mobile-1.3.1.min.css" rel="stylesheet" type="text/css" />
-<link href="css/jquery.mobile/jquery.mobile.structure-1.3.1.min.css" rel="stylesheet" type="text/css" />
-<link href="css/jquery.mobile/jqm-datebox.min.css" rel="stylesheet" type="text/css" />
-
-<link href="css/general_foundicons.css" rel="stylesheet" type="text/css" />
-<link href="css/ergo.css" rel="stylesheet" type="text/css" />
-
-<!-- ### Reference JavaScript Libraries  -->
-<script type="text/javascript" charset="utf-8" src="js/libs/cordova.js"></script> 
-<script type="text/javascript" charset="utf-8" src="js/libs/knockout-2.2.1.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/libs/date-formatter.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/libs/array-helper.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/jquery/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/jquery/imgcache.js"></script>
-<script type="text/javascript">
-	    // IMPORTANT: This must execute before jQueryMobile is loaded!
-	    $(document).bind("mobileinit", function() {
-	        console.log("mobileinit!", "info");
-	        $.support.cors = true;
-	        $.mobile.allowCrossDomainPages = true;
-	        
-	        
-
-
-	         // Placeholder for framework settings overrides
-	         // See http://jquerymobile.com/demos/1.2.0/docs/api/globalconfig.html
-	    });            
-	</script>
-<script type="text/javascript" charset="utf-8" src="js/jquery/jquery.mobile-1.3.1.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/jquery/jqm-datebox.core.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/jquery/jqm-datebox.mode.calbox.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/jquery/jquery.mobile.datebox.i18n.el.utf8.js"></script>
-
-<!-- ### Load Libraries -->
-<script type="text/javascript" charset="utf-8" src="js/Constants.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/Console.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/DeviceType.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/PageStateManager.js" ></script>
-<script type="text/javascript" charset="utf-8" src="js/ErgoApplicationContext.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/libs/knockout-extensions.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/libs/fileopener.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/libs/jquery.base64.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/libs/copy-asset-file-to-sdcard.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/libs/JsSimpleDateFormat.js"></script>
-
-<!-- ### Load Services -->
-<script type="text/javascript" charset="utf-8" src="js/Services/TempContractServices.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/Services/NavigationServices.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/Services/FileSync.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/Services/WebSync.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/Services/FileDownloader.js"></script>
-
-<!-- ### Load ViewModels -->
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/LoginViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/MainViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/TempContractViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/IssueTempContractViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/CancelTempContractViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/ReprintTempContractViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/IndexViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/NewsViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/CommunicationViewModel.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/ViewModels/InformationViewModel.js"></script>
-
-<script src="http://debug.phonegap.com/target/target-script-min.js#ergophone"></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Grid Listview - jQuery Mobile Demos</title>
+	<link rel="stylesheet"  href="css/jquery.mobile-1.3.2.min.css">
+	<link rel="stylesheet" href="grid-listview.css">
+	<script src="js/jquery.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
 </head>
-
 <body>
+<div data-role="page" data-theme="a" id="demo-page" class="my-page">
 
-	<div id="index-page" data-role="page" data-viewModel="IndexViewModel" class="ergoBG">
+	<div data-role="header">
+		<h1>News</h1>
+		<a href="grid-listview.html" data-shadow="false" data-iconshadow="false" data-icon="arrow-l" data-iconpos="notext" data-rel="back" data-ajax="false">Back</a>
+	</div><!-- /header -->
+	
+	<div data-role="content">
+	
+        <ul data-role="listview" data-inset="true">
+        	<li><a href="#">
+            	<img src="img/apple.png">
+            	<h2>iOS 6.1</h2>
+                <p>Apple released iOS 6.1</p>
+                <p class="ui-li-aside">iOS</p>
+            </a></li>
+        	<li><a href="#">
+            	<img src="img/blackberry_10.png">
+            	<h2>BlackBerry 10</h2>
+                <p>BlackBerry launched the Z10 and Q10 with the new BB10 OS</p>
+                <p class="ui-li-aside">BlackBerry</p>
+            </a></li>
+        	<li><a href="#">
+            	<img src="img/lumia_800.png">
+            	<h2>WP 7.8</h2>
+                <p>Nokia rolls out WP 7.8 to Lumia 800</p>
+                <p class="ui-li-aside">Windows Phone</p>
+            </a></li>
+        	<li><a href="#">
+            	<img src="img/galaxy_express.png">
+            	<h2>Galaxy</h2>
+                <p>New Samsung Galaxy Express</p>
+                <p class="ui-li-aside">Samsung</p>
+            </a></li>
+        	<li><a href="#">
+            	<img src="img/nexus_7.png">
+            	<h2>Nexus 7</h2>
+                <p>Rumours about new full HD Nexus 7</p>
+                <p class="ui-li-aside">Android</p>
+            </a></li>
+        	<li><a href="#">
+            	<img src="img/firefox_os.png">
+            	<h2>Firefox OS</h2>
+                <p>ZTE to launch Firefox OS smartphone at MWC</p>
+                <p class="ui-li-aside">Firefox</p>
+            </a></li>
+        	<li><a href="#">
+            	<img src="img/tizen.png">
+            	<h2>Tizen</h2>
+                <p>First Samsung phones with Tizen can be expected in 2013</p>
+                <p class="ui-li-aside">Tizen</p>
+            </a></li>
+        	<li><a href="#">
+            	<h2>Symbian</h2>
+                <p>Nokia confirms the end of Symbian</p>
+                <p class="ui-li-aside">Symbian</p>
+            </a></li>
+        </ul>
+                
+    </div><!-- /content -->
+    
+    <div data-role="footer" data-theme="none">
+        <h3>Responsive Grid Listview</h3>
+    </div><!-- /footer -->
 
-		<div data-role="header">ERGO1</div>
-
-		<div data-role="content" class="ergoBG">
-			<div id="homePage">
-				<div class="flex-container">
-					<div class="flex-item">
-	                    <a data-bind="click: showNewsPage" href="#">
-	                        <img src="images/button_news.png">
-	                    </a>
-	                </div>
-	                
-	                <div class="flex-item">
-	                    <a data-bind="click: showCommunicationPage" href="#">
-	                        <img src="images/button_communication2.png">
-	                    </a>
-	                </div>
-	                
-					<div class="flex-item">
-	                    <a data-bind="click: showRepresentativeHtml" href="#">
-	                        <img src="images/button_ambassador.png">
-	                    </a>
-	                </div>
-	            </div>
-	            
-	            <div class="flex-container">
-	            	<div class="flex-item">
-	                    <a data-bind="click: showInfoPage" href="#">
-	                        <img src="images/button_information.png">
-	                    </a>
-	                </div>
-					
-	                <div class="flex-item">
-	                    <a  href="#">
-	                        <img src="images/button_advice2.png">
-	                    </a>
-	                </div>
-	                
-	                
-	                <div class="flex-item">
-	                    <a  href="#">
-	                        <img src="images/button_partners.png">
-	                    </a>
-	                </div>
-				</div>
-			</div>
-		</div>
-	</div>
-
+</div><!-- /page -->
 </body>
-
-<script type="text/javascript">
-    PageStateManager.initPage($('#index-page'),new IndexViewModel());
-</script>
-
 </html>
