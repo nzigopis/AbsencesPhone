@@ -1,6 +1,5 @@
-﻿PageStateManager = (function () {
-    var viewModels = {};
-
+PageStateManager = (function () {
+    
     var initPage = function (page, viewModel) {
 
         // If binding exists, return
@@ -20,7 +19,7 @@
                 ko.applyBindings(viewModel, page[0]);
             }
             else
-                Console.log('Error moving to page ' + page[0] + '. No view model provided !');
+                throw('Error moving to page ' + page[0] + '. No view model provided !');
         };
 
     };

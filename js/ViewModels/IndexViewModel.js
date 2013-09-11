@@ -1,4 +1,4 @@
-﻿IndexViewModel = function () {
+IndexViewModel = function () {
 
     // Console.log('new LoginViewModel()');
 
@@ -26,7 +26,7 @@
 				db.transaction(function (tx) {
 					tx.executeSql('SELECT * FROM USERS', [], function (tx, results) {
 						var len = results.rows.length, i;
-						if (len == 0)
+						if (len === 0)
 						{
 							tx.executeSql('INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis']);
 							LoggedOnUser.init('nikos', 'zigopis');
