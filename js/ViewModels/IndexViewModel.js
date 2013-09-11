@@ -14,7 +14,7 @@
         var pwd = this.userPassword();
 
         $.mobile.loading('show');
-        // PageStateManager.changePage('main.html', new MainViewModel(partner));
+        
 		var db = openDatabase('apousies.db', '1.0', 'Test DB', 2 * 1024 * 1024);
 		db.transaction(function (tx) {
 			try
@@ -30,14 +30,14 @@
 						{
 							tx.executeSql('INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis']);
 							LoggedOnUser.init('nikos', 'zigopis');
-							PageStateManager.changePage('main.html');
+							PageStateManager.changePage('class.html');
 							$.mobile.loading('hide');
 							return;
 						}
 						for (i = 0; i < len; i++){
 							if (user === results.rows.item(i).userName && pwd === results.rows.item(i).userPassword) {
 								LoggedOnUser.init(user, pwd);
-								PageStateManager.changePage('main.html');
+								PageStateManager.changePage('class.html');
 								$.mobile.loading('hide');
 							}
 							else
