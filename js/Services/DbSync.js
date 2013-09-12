@@ -2,8 +2,13 @@ DbSync = (function () {
     
     var loadFromServer = function (tx, user, pwd, authenticate, dbSyncFail) {
 
-        tx.executeSql('CREATE TABLE IF NOT EXISTS USERS (userName unique, userPassword)');
-        tx.executeSql('INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis']);
+        tx.executeSql(
+			'CREATE TABLE IF NOT EXISTS USERS (userName TEXT PRIMARY KEY, userPassword TEXT)');
+        tx.executeSql(
+			'CREATE TABLE IF NOT EXISTS CLASSES (classId TEXT PRIMARY KEY, classDescription TEXT)');
+		
+        tx.executeSql(
+			'INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis']);
 		
 		tx.executeSql('SELECT * FROM USERS', [], function (tx, results) {
 			if (results.rows.length === 0)
