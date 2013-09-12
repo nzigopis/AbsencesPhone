@@ -6,6 +6,9 @@ DbSync = (function () {
 			'CREATE TABLE IF NOT EXISTS USERS (userName TEXT PRIMARY KEY, userPassword TEXT)');
         tx.executeSql(
 			'CREATE TABLE IF NOT EXISTS CLASSES (classId TEXT PRIMARY KEY, classDescription TEXT)');
+        tx.executeSql(
+			'CREATE TABLE IF NOT EXISTS STUDENTS (studentId INTEGER PRIMARY KEY, \n\
+				firstName TEXT, lastName TEXT, fatherName TEXT, motherName TEXT');
 		
         tx.executeSql(
 			'INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis']);
