@@ -1,52 +1,31 @@
 DbSync = (function () {
     
-    var initialize = function (userName, userPassword) {
+    var loadFromServer = function (tx, user, pwd, authenticate, dbSyncFail) {
 
-        var db = openDatabase('absences.db', '1.0', 'Test DB', 2 * 1024 * 1024);
-
-        db.transaction(function (tx) {
-
-            db.transaction(function (tx) {
-               tx.executeSql('CREATE TABLE IF NOT EXISTS USERS (userName unique, userPassword)');
-            });
-            // 
-            db.transaction(function (tx) {
-                tx.executeSql('SELECT * FROM USERS', [], function (tx, results) {
-                    var len = results.rows.length, i;
-                    if (len === 0)
-                    {
-                        tx.executeSql('INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis']);
-                        return true;
-                    }
-                    for (i = 0; i < len; i++){
-                        if (userName === results.rows.item(i).userName && 
-                            userPassword === results.rows.item(i).userPassword) {
-                            return true;
-                        }
-                        else
-                        {
-                            throw("Λάθος Στοιχεία !");
-                        }
-                    }
-                }, null);
-            });
-
-        });
-    };
+        tx.executeSql('CREATE TABLE IF NOT EXISTS USERS (userName unique, userPassword)');
+        tx.executeSql('INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis']);
+		
+		tx.executeSql('SELECT * FROM USERS', [], function (tx, results) {
+			if (results.rows.length === 0)
+				dbSyncFail('Δεν μεταφέρθηκαν δεδομένα από τον server !');
+			else
+				authenticate(results.rows, user, pwd);
+		}, function (tx, e) {
+			dbSyncFail('Δεν μεταφέρθηκαν δεδομένα από τον server !');
+		});
+	};
 	
-    var pull = function (userName, userPassword, url) {
-        return initialize(userName, userPassword);
+    var pull = function (tx, user, pwd, authenticate, dbSyncFail) {
+        loadFromServer(tx, user, pwd, authenticate, dbSyncFail);
     };
 
-    var push = function (userName, userPassword, url) {
+    var push = function (tx, user, pwd, dbSyncSuccess, dbSyncFail) {
 
     };
 
-    return 
-    {
-        pull: pull;
-        push: push;
-    };
+    var dbSyncPublicMethods = { pull: pull, push: push };
     
+	return dbSyncPublicMethods;
+
 })();
 

@@ -18,8 +18,8 @@ PageStateManager = (function () {
                 viewModel = eval('new ' + viewModelName + '()');
                 ko.applyBindings(viewModel, page[0]);
             }
-            else
-                throw('Error moving to page ' + page[0] + '. No view model provided !');
+//            else
+//                throw('Error moving to page ' + page[0] + '. No view model provided !');
         };
 
     };
