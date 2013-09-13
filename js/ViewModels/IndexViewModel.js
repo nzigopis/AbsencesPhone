@@ -1,48 +1,62 @@
 IndexViewModel = function () {
 
-    this.userName = ko.observable("");
-    this.userPassword = ko.observable("");
-    this.loginMessage = ko.observable("");
+	self = this;
 	
-	var errorLabel = this.loginMessage;
+    self.userName = ko.observable("");
+    self.userPassword = ko.observable("");
+    self.loginMessage = ko.observable("");
+	self.log = ko.observable("");
+	
+	var errorLabel = self.loginMessage;
         
-    this.login = function () {
+    self.login = function () {
         errorLabel("");
 
-        var user = this.userName();
-        var pwd = this.userPassword();
+        var user = self.userName();
+        var pwd = self.userPassword();
 
 		$.mobile.loading('show');
 
-		var db = openDatabase('absences.db', '1.0', 'Test DB', 2 * 1024 * 1024);
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
 		db.transaction(function (tx) {
 			tx.executeSql('SELECT * FROM USERS', [], function (tx, results) {
 				if (results.rows.length === 0)
-					DbSync.pull(tx, user, pwd, authenticate, authenticationFail);
+					DbSync.pull(tx, user, pwd, authenticate, authenticationFail, errorLog);
 				else
-					authenticate(results.rows, user, pwd);
+					authenticate(user, pwd);
 			}, function (tx, e) {
-				DbSync.pull(tx, user, pwd, authenticate, authenticationFail);
+				DbSync.pull(tx, user, pwd, authenticate, authenticationFail, errorLog);
 			});
 		});
             
     };
 
-	var authenticate = function(users, user, pwd) {
-		var len = users.length, i;
-                        
-		for (i = 0; i < len; i++){
-			if (user === users.item(i).userName && pwd === users.item(i).userPassword) {
-				errorLabel("");
-				LoggedOnUser.init('nikos', 'zigopis');
-				PageStateManager.changePage('class.html', {});
-				return;
-			}
-		}
-		authenticationFail("Λάθος Στοιχεία !");
+	var authenticate = function(user, pwd) {
+	
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		db.readTransaction(function (tx) {
+			tx.executeSql('SELECT * FROM USERS WHERE userName=?', [user], 
+				function (tx, results) {
+					if (results.rows.length === 0 || results.rows.item(0).userPassword !== pwd)
+						authenticationFail("Λάθος Στοιχεία !");
+					else {
+						errorLabel("");
+						LoggedOnUser.init('nikos', 'zigopis');
+						PageStateManager.changePage('classes.html', new ClassesViewModel());
+					}
+				},
+				function (e) { authenticationFail('Λάθος Στοιχεία !');}
+			);
+		});
 	}
 
 	var authenticationFail = function(e) {
 		errorLabel(JSON.stringify(e));
+		$.mobile.loading('hide');
+	}
+	
+	var errorLog = function (error) {
+		var current = self.log(); 
+		self.log(current + "\n" + error); 
 	}
 }

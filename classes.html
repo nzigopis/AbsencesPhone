@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<title>Επιλογή Τμήματος</title>
+</head>
+
+<body>
+	
+	<div id="info-page" data-role="page" data-viewModel="ClassViewModel">
+		
+		<div data-role="header">Επιλέξτε Τμήμα</div>
+		
+		<div data-role="content">
+			<ul data-bind="foreach: classes">
+				<li>
+					<div>
+						<span data-bind="text: name"> </span> has 
+						<span data-bind='text: children().length'>&nbsp;</span> children:
+						<a href='#' data-bind='click: addChild '>Add child</a>
+						<span class='renderTime' data-bind='visible: $root.showRenderTimes'>
+							(person rendered at <span data-bind='text: new Date().getSeconds()' > </span>)
+						</span>
+					</div>
+					<ul data-bind="foreach: children">
+						<li>
+							<span data-bind="text: $data"> </span>
+							<span class='renderTime' data-bind='visible: $root.showRenderTimes'>
+								(child rendered at <span data-bind='text: new Date().getSeconds()' > </span>)
+							</span>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
+	</div>
+	
+</body>
+
+</html>
