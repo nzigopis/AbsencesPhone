@@ -21,11 +21,11 @@ IndexViewModel = function () {
 		db.transaction(function (tx) {
 			tx.executeSql('SELECT * FROM USERS', [], function (tx, results) {
 				if (results.rows.length === 0)
-					DbSync.pull(tx, user, pwd, authenticate, authenticationFail, errorLog);
+					DbSync.pull(tx, user, pwd, authenticate);
 				else
 					authenticate(user, pwd);
 			}, function (tx, e) {
-				DbSync.pull(tx, user, pwd, authenticate, authenticationFail, errorLog);
+				DbSync.pull(tx, user, pwd, authenticate);
 			});
 		});
             
@@ -38,14 +38,14 @@ IndexViewModel = function () {
 			tx.executeSql('SELECT * FROM USERS WHERE userName=?', [user], 
 				function (tx, results) {
 					if (results.rows.length === 0 || results.rows.item(0).userPassword !== pwd)
-						authenticationFail("Λάθος Στοιχεία !");
+						authenticationFail("Λάθος Όνομα Χρήστη !");
 					else {
 						errorLabel("");
 						LoggedOnUser.init('nikos', 'zigopis');
 						PageStateManager.changePage('classes.html', new ClassesViewModel());
 					}
 				},
-				function (e) { authenticationFail('Λάθος Στοιχεία !');}
+				function (e) { authenticationFail('Δεν φορτώθηκαν δεδομένα από τον server !');}
 			);
 		});
 	}
