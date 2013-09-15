@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<title>Επιλογή Μαθητή</title>
+</head>
+
+<body>
+	
+	<div id="info-page" data-role="page" data-viewModel="ClassStudentsViewModel">
+		
+		<div data-role="header">Επιλέξτε Μαθητή</div>
+		
+		<div data-role="content">
+			<ul data-role="listview" data-bind="foreach: students">
+				<li><a href="#" data-bind='text: studentInfo(), click: $parent.selectStudent'></a></li>
+			</ul>
+		</div>
+		
+	</div>
+	
+</body>
+
+</html>

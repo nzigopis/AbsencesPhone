@@ -7,8 +7,7 @@ DbSync = (function () {
 		};
 		try 
 		{
-			tx.executeSql('CREATE TABLE IF NOT EXISTS USERS (userName TEXT PRIMARY KEY, userPassword TEXT)',
-				function () {errorLog('CREATED TABLE USERS !!!');});
+			tx.executeSql('CREATE TABLE IF NOT EXISTS USERS (userName TEXT PRIMARY KEY, userPassword TEXT)');
 			tx.executeSql('INSERT INTO USERS (userName, userPassword) VALUES (?, ?)', ['nikos', 'zigopis'],
 				function () {errorLog('Added nzigopis');}
 			);
@@ -18,19 +17,34 @@ DbSync = (function () {
 				var cls = 'Α' + i;
 				tx.executeSql('INSERT INTO CLASSES (classId, classDescription) VALUES (?, ?)', [cls, cls],
 					(function (j) {
-						return function (tx, results) {errorLog('Added ' + j)};
+						return function () {errorLog('Added Α' + j)};
 					})(i)
 					);
 			}
 			
-//			tx.executeSql('CREATE TABLE IF NOT EXISTS STUDENTS (studentId INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT, fatherName TEXT, motherName TEXT');
-//			for (var i = 1; i <= 10; i++ ){
-//				var student = 'Μαθητής ' + i;
-//				tx.executeSql('INSERT INTO STUDENTS (studentId,firstName,lastName,fatherName,motherName) VALUES (?,?,?,?,?)', 
-//					[i, student, student, null, null],
-//					function () {errorLog('Added ' + student);});
-//			}
+			tx.executeSql('CREATE TABLE IF NOT EXISTS STUDENTS (studentId INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT, fatherName TEXT, motherName TEXT)');
+			for (var i = 1; i <= 10; i++ ){
+				var student = 'Μαθητής ' + i;
+				tx.executeSql('INSERT INTO STUDENTS (studentId,firstName,lastName,fatherName,motherName) VALUES (?,?,?,?,?)', 
+					[i, student, student, null, null],
+					(function (j) {
+						return function () {errorLog('Added ' + j)};
+					})(student)
+				);
+			}
 			
+			tx.executeSql('CREATE TABLE IF NOT EXISTS CLASS_STUDENTS (studentId INTEGER , classId TEXT, PRIMARY KEY (studentId, classId))');
+			for (var i = 1; i <= 10; i++ ){
+				var student = 'Μαθητής ' + i;
+				tx.executeSql('INSERT INTO CLASS_STUDENTS (studentId,classId) VALUES (?,?)', [i, 'Α1'],
+					(function (j) {
+						return function () {errorLog('Added Α1 <->' + j)};
+					})(student)
+				);
+			}
+			
+			tx.executeSql('CREATE TABLE IF NOT EXISTS ABSENCES (studentId INTEGER, absencesDate DATE, h1 INTEGER, h2 INTEGER, h3 INTEGER, h4 INTEGER, h5 INTEGER, h6 INTEGER, h7 INTEGER, PRIMARY KEY (studentId, absencesDate))');
+
 			authenticate(user, pwd);
 		}
 		catch (e)
@@ -54,10 +68,3 @@ DbSync = (function () {
 
 })();
 
-
-//			tx.executeSql('CREATE TABLE IF NOT EXISTS CLASS_STUDENTS \n\
-//				(studentId INTEGER , classId TEXT, PRIMARY KEY (studentId, classId)');
-//			tx.executeSql('CREATE TABLE IF NOT EXISTS ABSENCES \n\
-//				(studentId INTEGER, absencesDate DATE,\n\
-//				h1 INTEGER, h2 INTEGER, h3 INTEGER, h4 INTEGER, h5 INTEGER,\n\
-//				h6 INTEGER, h7 INTEGER, PRIMARY KEY (studentId, absencesDate)');
