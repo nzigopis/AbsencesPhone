@@ -9,12 +9,18 @@ ClassStudentsViewModel = function (selectedClass, myLog) {
 		};
 		
     self.students = ko.observableArray();
+    self.months = ko.observableArray(['Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος','Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος']);
         
     self.selectStudent = function(selectedStudent) {
         
         PageStateManager.changePage('student.html', new StudentViewModel(selectedStudent));
     };
 
+	self.selectMonth = function(selectedMonth) {
+        
+        PageStateManager.changePage('month.html', new MonthViewModel(self.selectedClass, selectedMonth));
+    };
+	
 	DbFuncs.loadClassStudents(self.selectedClass, function(data) { 
 		try 
 		{
