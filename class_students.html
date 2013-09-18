@@ -15,7 +15,7 @@
 
 	<!-- Add anything new in this segment -->
 
-	<div data-role="collapsible">
+	<div data-role="collapsible" data-inset="false">
 		<h4>Επιλέξτε Μαθητή.</h4>
 		<ul data-role="listview" data-bind="foreach: students" data-filter="true">
 			<li>
@@ -25,11 +25,11 @@
 		</ul>
 	</div>
 
-	<div data-role="collapsible">
+	<div data-role="collapsible" data-inset="false">
 		<h4>Επιλέξτε Μήνα.</h4>
 		<ul data-role="listview" data-bind="foreach: months">
 			<li>
-				<a href="#" data-bind='text: $data, click: $parent.selectMonth'></a>
+				<a href="#" data-bind='text: new JsSimpleDateFormat("MMMM yyyy", "el").format($data), click: $parent.selectMonth'></a>
 			</li>
 		</ul>
 	</div>

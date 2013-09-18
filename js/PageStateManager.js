@@ -34,15 +34,28 @@ PageStateManager = (function () {
     };
 
     var onPageChange = function (e, info) {
-        //Console.log('Enter onPageChange=' + info.toPage);
         initPage(info.toPage, info.options.viewModel);
-        //Console.log('Exit onPageChange');
     };
 
     $(document).bind("pagechange", onPageChange);
 
-    return {
+	var yearStart;
+	var yearEnd;
+	var firstDayOfCurrentMonth;
+	var currentClass;
+	var currentStudent;
+	var userName;
+	var userPassword;
+	
+	return {
         initPage: initPage,
-        changePage: changePage
+        changePage: changePage,
+		yearStart: yearStart,
+		yearEnd: yearEnd,
+		firstDayOfCurrentMonth: firstDayOfCurrentMonth,
+		currentClass: currentClass,
+		currentStudent: currentStudent,
+		userName: userName,
+		userPassword: userPassword
     };
 })();

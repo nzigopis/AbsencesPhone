@@ -2,14 +2,23 @@ ClassStudentsViewModel = function (selectedClass, myLog) {
 	
 	self = this;
 	
-	self.selectedClass = selectedClass;
+	self.selectedClass = selectedClass || PageStateManager.currentClass;
+	if (selectedClass) 
+		PageStateManager.currentClass = selectedClass;
 	
 	self.log = myLog || function(err) { 
 			console.log(err); 
 		};
 		
     self.students = ko.observableArray();
-    self.months = ko.observableArray(['Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος','Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος']);
+	
+	var monthStartDates = [];
+	for (var i = 8; i < 12; i++)
+		monthStartDates.push(new Date(PageStateManager.yearStart, i, 1));
+	for (var i = 0; i < 5; i++)
+		monthStartDates.push(new Date(PageStateManager.yearEnd, i, 1));
+	
+    self.months = ko.observableArray(monthStartDates);
         
     self.selectStudent = function(selectedStudent) {
         

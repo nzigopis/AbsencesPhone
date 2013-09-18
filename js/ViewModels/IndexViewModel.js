@@ -12,9 +12,18 @@ IndexViewModel = function () {
     self.login = function () {
         errorLabel("");
 
-        var user = self.userName();
-        var pwd = self.userPassword();
-
+        var user;
+		if (self.userName)
+			user = self.userName();
+		else
+			user = PageStateManager.userName;
+		
+        var pwd;
+		if (self.userPassword)
+			pwd = self.userPassword();
+		else
+			pwd = PageStateManager.userPassword;
+		
 		$.mobile.loading('show');
 
 		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
@@ -40,6 +49,10 @@ IndexViewModel = function () {
 					if (results.rows.length === 0 || results.rows.item(0).userPassword !== pwd)
 						authenticationFail("Λάθος Όνομα Χρήστη !");
 					else {
+						PageStateManager.yearStart = 2013;
+						PageStateManager.yearEnd = 2014;
+						PageStateManager.userName = user;
+						PageStateManager.userPassword = pwd;
 						errorLabel("");
 						LoggedOnUser.init('nikos', 'zigopis');
 						PageStateManager.changePage('classes.html', new ClassesViewModel());
