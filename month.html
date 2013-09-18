@@ -9,7 +9,7 @@
 	
 	<div id="info-page" data-role="page" data-viewModel="MonthViewModel">
 		
-	<div data-role="header" data-bind='text: selectedClass.classId + " " + new JsSimpleDateFormat("MMMM yyyy", "el").format(firstDayOfMonth)' 
+	<div data-role="header" data-bind='text: selectedClass.classId + " " + new JsSimpleDateFormat("MMMM yyyy", "el").format(firstDateOfMonth)' 
 		 style="text-align: center;"></div>
 
 	<div data-role="content">
@@ -20,7 +20,7 @@
 		
 		<h4>Επιλέξτε Ημερομηνία.</h4>
 		
-		<input type="date" 
+		<input type="date" id="add-date"
 			data-role="datebox" data-options='{"mode": "calbox"}'  
 			data-bind="dateBoxValue: newDate" />
 		<!--</form>-->
@@ -30,7 +30,6 @@
 			data-bind="foreach: daysWithAbsences">
 			<li>
 				<a href="#" data-bind='text: new JsSimpleDateFormat("dd EEEE", "el").format($data), click: $parent.selectDay'></a>
-<!--				<span data-bind="text: studentAbsences()" class="ui-li-count"></span>-->
 			</li>
 		</ul>
 		
@@ -43,5 +42,6 @@
 	</div>
 	
 </body>
+
 
 </html>

@@ -78,7 +78,7 @@ DbFuncs = (function () {
 		});
 	};
 	
-	var loadDaysWithAbsences = function (selectedClass, monthName, successCallback, errorCallback) {
+	var loadDaysWithAbsences = function (selectedClass, firstDayOfMonth, successCallback, errorCallback) {
 		
 		successCallback = successCallback || function(data) {};
 		
@@ -91,8 +91,8 @@ DbFuncs = (function () {
 			'WHERE CS.CLASSID=? AND A.ABSENCESDATE BETWEEN ? AND ? ' +
 			'ORDER BY absencesDate';
 	
-		var fromDate = startOfMonth(monthName);
-		var toDate = endOfMonth(monthName);
+		var fromDate = new JsSimpleDateFormat("yyyy-MM-dd").format(firstDayOfMonth);
+		var toDate = endOfMonth(firstDayOfMonth);
 		
 		db.readTransaction(function (tx) {
 			tx.executeSql(sql, 
@@ -116,35 +116,25 @@ DbFuncs = (function () {
 		});
 	};
 	
-	var startOfMonth = function(monthName) {
-		var d = new Date();
-		var sd = new Date(d.getFullYear(), monthNameToNum(monthName), 1);
-		var oDf = new JsSimpleDateFormat("yyyy-MM-dd");
-		var fmt = oDf.format(sd);
-		return fmt;
+	var lastDayOfMonth = function(month) {
+		switch(month)
+		{
+			case 1:
+				return 28;
+			case 8:
+			case 10:
+			case 3:
+				return 30;
+			default:
+				return 31;
+		}	
 	};
 	
-	var endOfMonth = function(monthName) {
-		var d = new Date();
-		var day;
-		switch(monthName)
-		{
-			case 'Φεβρουάριος':
-				day = 28;
-				break;
-			case 'Σεπτέμβριος':
-			case 'Νοέμβριος':
-			case 'Απρίλιος':
-				day = 30;
-				break;
-			default:
-				day = 31;
-				break;
-		}
-		var endDate = new Date(d.getFullYear(), monthNameToNum(monthName), day);
-		var oDf = new JsSimpleDateFormat("yyyy-MM-dd");
-		var fmt = oDf.format(endDate);
-		return fmt;
+	var endOfMonth = function(firstDateOfMonth) {
+		var day = lastDayOfMonth(firstDateOfMonth.getMonth());
+		
+		var endDate = new Date(firstDateOfMonth.getFullYear(), firstDateOfMonth.getMonth(), day);
+		return new JsSimpleDateFormat("yyyy-MM-dd").format(endDate);
 	};
 	
 	var monthNameToNum = function(monthName) {
@@ -171,7 +161,8 @@ DbFuncs = (function () {
 		}
 	};
 	
-	return { loadClasses: loadClasses, loadClassStudents: loadClassStudents, loadDaysWithAbsences: loadDaysWithAbsences };
+	return { loadClasses: loadClasses, loadClassStudents: loadClassStudents, 
+				loadDaysWithAbsences: loadDaysWithAbsences, lastDayOfMonth: lastDayOfMonth };
 
 })();
 

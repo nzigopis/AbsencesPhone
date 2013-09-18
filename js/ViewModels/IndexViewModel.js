@@ -54,7 +54,6 @@ IndexViewModel = function () {
 						PageStateManager.userName = user;
 						PageStateManager.userPassword = pwd;
 						errorLabel("");
-						LoggedOnUser.init('nikos', 'zigopis');
 						PageStateManager.changePage('classes.html', new ClassesViewModel());
 					}
 				},
