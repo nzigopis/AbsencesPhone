@@ -44,6 +44,8 @@ PageStateManager = (function () {
 	var firstDayOfCurrentMonth;
 	var currentClass;
 	var currentStudent;
+	var currentDate;
+	var currentStudent;
 	var userName;
 	var userPassword;
 	
@@ -55,6 +57,7 @@ PageStateManager = (function () {
 		firstDayOfCurrentMonth: firstDayOfCurrentMonth,
 		currentClass: currentClass,
 		currentStudent: currentStudent,
+		currentDate: currentDate,
 		userName: userName,
 		userPassword: userPassword
     };

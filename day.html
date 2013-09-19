@@ -10,8 +10,9 @@
 	<div id="info-page" data-role="page" data-viewModel="DayViewModel">
 		
 	<div data-role="header" 
-		 data-bind='text: selectedClass.classDescription + " " + new JsSimpleDateFormat("dd/MMM/yyyy", "el").format(selectedDate)' 
-		 style="text-align: center;"></div>
+		 data-bind='text: selectedClass.classDescription + " " + new JsSimpleDateFormat("dd/MMMM/yyyy", "el").format(selectedDate)' 
+		 style="text-align: center;">
+	</div>
 
 	<div data-role="content">
 

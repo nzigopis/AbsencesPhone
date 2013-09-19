@@ -19,8 +19,8 @@ MonthViewModel = function (selectedClass, firstDateOfMonth, myLog) {
 	
 	self.validDates = ko.observableArray();
 	
-    self.selectDay = function(selectedDay) {
-        PageStateManager.changePage('day.html', new DayViewModel(selectedClass, selectedDay));
+    self.selectDay = function(selectedDate) {
+        PageStateManager.changePage('day.html', new DayViewModel(selectedClass, selectedDate));
     };
 	
 	self.addDay = function() {

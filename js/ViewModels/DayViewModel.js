@@ -1,4 +1,4 @@
-DayViewModel = function(selectedClass, selectedDate, loadClassStudentsForDateFunc, myLog) {
+DayViewModel = function(selectedClass, selectedDate, loadStudentsAbsencesForClassAndDateFunc, myLog) {
 	
 	self = this;
 	
@@ -6,36 +6,31 @@ DayViewModel = function(selectedClass, selectedDate, loadClassStudentsForDateFun
 	if (selectedClass) 
 		PageStateManager.currentClass = selectedClass;
 	
-	self.log = myLog || function(err) { 
-			console.log(err); 
-		};
-		
-	self.selectedClass = selectedClass;
-	self.selectedDate = selectedDate;
+	self.selectedDate = selectedDate || PageStateManager.currentDate;
+	if (selectedDate) 
+		PageStateManager.currentDate = selectedDate;
+	
+	self.log = myLog || function(err) { console.log(err); };
 	
     self.students = ko.observableArray();
 	
 	self.selectStudent = function(selectedStudent) {
-        
-        PageStateManager.changePage('student.html', new StudentViewModel(selectedStudent));
+        PageStateManager.changePage('student_absences_for_date.html', 
+			new StudentAbsencesForDateViewModel(selectedDate, selectedStudent));
     };
 
-	self.selectMonth = function(selectedMonth) {
-        
-        PageStateManager.changePage('month.html', new MonthViewModel(self.selectedClass, selectedMonth));
-    };
-	
-	loadClassStudentsForDateFunc = loadClassStudentsForDateFunc || DbFuncs.loadClassStudentsForDate;
-	
-	loadClassStudentsForDateFunc(self.selectedClass, self.selectedDate, function(data) { 
-		try 
-		{
-			self.students(data); 
-		} 
-		catch (e)
-		{
-			self.log(JSON.stringify(e));
-		}
+	loadStudentsAbsencesForClassAndDateFunc = loadStudentsAbsencesForClassAndDateFunc || 
+			DbFuncs.loadStudentsAbsencesForClassAndDate;
+	loadStudentsAbsencesForClassAndDateFunc(self.selectedClass, self.selectedDate, 
+		function(data) { 
+			try 
+			{
+				self.students(data); 
+			} 
+			catch (e)
+			{
+				self.log(JSON.stringify(e));
+			}
 	});
 };
 

@@ -1,13 +1,10 @@
 DbFuncs = (function () {
     
     var loadClasses = function (successCallback, errorCallback) {
-		
 		successCallback = successCallback || function(data) {};
-		
 		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
 		
 		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
-		
 		db.readTransaction(function (tx) {
 			tx.executeSql('SELECT * FROM CLASSES', [], 
 				function (tx, results) {
@@ -28,14 +25,14 @@ DbFuncs = (function () {
 		});
 	};
 	
-	var loadClassStudentsForDate = function (aClass, selectedDate, successCallback, errorCallback) {
+	var loadStudentsAbsencesForClassAndDate = function (aClass, selectedDate, successCallback, errorCallback) {
 		successCallback = successCallback || function(data) {};
 		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
 		
 		var sql = createClassStudentsSql();
 		loadStudentsFromDb(sql, aClass.classId, 
 			function(students) {
-				loadStudentAbsencesForDate(students, selectedDate, successCallback, errorCallback)
+				loadSumsAbsences(students, selectedDate, successCallback, errorCallback)
 			}, 
 			errorCallback);
 	};
@@ -50,19 +47,16 @@ DbFuncs = (function () {
 	
 	var loadDaysWithAbsences = function (selectedClass, firstDayOfMonth, successCallback, errorCallback) {
 		successCallback = successCallback || function(data) {};
-		
 		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
-		
-		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
 		
 		var sql = 'SELECT DISTINCT absencesDate ' +
 			'FROM ABSENCES A INNER JOIN CLASS_STUDENTS CS ON A.STUDENTID=CS.STUDENTID ' +
 			'WHERE CS.CLASSID=? AND A.ABSENCESDATE BETWEEN ? AND ? ' +
 			'ORDER BY absencesDate';
-	
 		var fromDate = new JsSimpleDateFormat("yyyy-MM-dd").format(firstDayOfMonth);
 		var toDate = DateFuncs.endOfMonth(firstDayOfMonth);
 		
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
 		db.readTransaction(function (tx) {
 			tx.executeSql(sql, 
 				[selectedClass.classId, fromDate, toDate], 
@@ -84,6 +78,32 @@ DbFuncs = (function () {
 			});
 		});
 	};
+	
+	var loadStudentAbsencesForDate= function (selectedStudent, selectedDate, successCallback, errorCallback) {
+		successCallback = successCallback || function(data) {};
+		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
+		var dateFormatted = new JsSimpleDateFormat("yyyy-MM-dd").format(selectedDate);
+		var studentId = selectedStudent.studentId;
+		
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		db.readTransaction(function (tx) {
+			tx.executeSql('SELECT * FROM ABSENCES A WHERE A.STUDENTID=? AND A.ABSENCESDATE=?', 
+				[studentId, dateFormatted], 
+				function (tx, results) {
+					if (results.rows.length === 0)
+						successCallback(new Absences(studentId, selectedDate, 0, 0, 0, 0, 0, 0, 0));
+					else 
+					{
+						var a = results.rows.item(0);
+						successCallback(new Absences(studentId, selectedDate, a.h1, a.h2, a.h3, a.h4, a.h5, a.h6, a.h7));
+					}
+				}, 
+				function (tx, e) {
+					errorCallback(JSON.stringify(e));
+			});
+		});
+	};
+	
 	
 	//	Helper Private Methods
 	
@@ -121,7 +141,7 @@ DbFuncs = (function () {
 		return ' SUM(' + unExcusedSum + ') UNEXCUSED, SUM(' + excusedSum + ') EXCUSED ';
 	};
 	
-	var loadStudentAbsencesForDate = function(students, selectedDate, successCallback, errorCallback) {
+	var loadSumsAbsences = function(students, selectedDate, successCallback, errorCallback) {
 		var dateFormatted = new JsSimpleDateFormat("yyyy-MM-dd").format(selectedDate);
 		var studentIds = _.map(students, function(student){ return student.studentId; });
 		
@@ -187,7 +207,8 @@ DbFuncs = (function () {
 		loadClasses: loadClasses, 
 		loadClassStudents: loadClassStudents, 
 		loadDaysWithAbsences: loadDaysWithAbsences,
-		loadClassStudentsForDate: loadClassStudentsForDate
+		loadStudentsAbsencesForClassAndDate: loadStudentsAbsencesForClassAndDate,
+		loadStudentAbsencesForDate: loadStudentAbsencesForDate
 	};
 
 })();
