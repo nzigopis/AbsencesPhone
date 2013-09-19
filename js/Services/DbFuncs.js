@@ -91,7 +91,7 @@ DbFuncs = (function () {
 				[studentId, dateFormatted], 
 				function (tx, results) {
 					if (results.rows.length === 0)
-						successCallback(new Absences(studentId, selectedDate, 0, 0, 0, 0, 0, 0, 0));
+						successCallback(new Absences(studentId, selectedDate, 1, 0, 0, 0, 0, 0, 0));
 					else 
 					{
 						var a = results.rows.item(0);
