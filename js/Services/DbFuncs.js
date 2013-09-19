@@ -28,58 +28,27 @@ DbFuncs = (function () {
 		});
 	};
 	
-	var loadClassStudents = function (aClass, successCallback, errorCallback) {
-		
+	var loadClassStudentsForDate = function (aClass, selectedDate, successCallback, errorCallback) {
 		successCallback = successCallback || function(data) {};
-		
 		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
 		
-		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		var sql = createClassStudentsSql();
+		loadStudentsFromDb(sql, aClass.classId, 
+			function(students) {
+				loadStudentAbsencesForDate(students, selectedDate, successCallback, errorCallback)
+			}, 
+			errorCallback);
+	};
+	
+	var loadClassStudents = function (aClass, successCallback, errorCallback) {
+		successCallback = successCallback || function(data) {};
+		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
 		
-		var excusedSum = "";
-		for (var i = 1; i <= 7; i++)
-		{
-			excusedSum += ' + case when A.H' + i + ' >= ' + AbsenceType.EXCUSED_PARENT + ' then 1 else 0 end';
-		}
-		excusedSum = excusedSum.substr(2);
-		
-		var unExcusedSum = "";
-		for (var i = 1; i <= 7; i++)
-		{
-			unExcusedSum += ' + case when A.H' + i + ' between 1 AND ' + (AbsenceType.EXCUSED_PARENT - 1) + ' then 1 else 0 end';
-		}
-		unExcusedSum = unExcusedSum.substr(2);
-		var sql = 'SELECT S.*, SUM(' + unExcusedSum + ') UNEXCUSED, SUM(' + 
-				excusedSum + ') EXCUSED ' +
-				'FROM STUDENTS S INNER JOIN CLASS_STUDENTS CS ON S.STUDENTID = CS.STUDENTID ' +
-				'LEFT JOIN ABSENCES A ON A.STUDENTID = S.STUDENTID WHERE CS.CLASSID=? ' +
-				'GROUP BY S.STUDENTID ORDER BY S.STUDENTID '
-
-		
-		db.readTransaction(function (tx) {
-			tx.executeSql(sql, 
-				[aClass.classId], 
-				function (tx, results) {
-					var len = results.rows.length, res = [];
-					if (len === 0)
-					{
-						successCallback();
-						return;
-					}
-					for (var i = 0; i < len; i++){
-						var row = results.rows.item(i);
-						res.push(new Student(row.studentId, row.firstName, row.lastName, row.fatherName, row.motherName));
-					}
-					successCallback(res);
-				}, 
-				function (tx, e) {
-					errorCallback(JSON.stringify(e));
-			});
-		});
+		var sql = createClassStudentsSql(true);
+		loadStudentsFromDb(sql, aClass.classId, successCallback, errorCallback);
 	};
 	
 	var loadDaysWithAbsences = function (selectedClass, firstDayOfMonth, successCallback, errorCallback) {
-		
 		successCallback = successCallback || function(data) {};
 		
 		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
@@ -92,7 +61,7 @@ DbFuncs = (function () {
 			'ORDER BY absencesDate';
 	
 		var fromDate = new JsSimpleDateFormat("yyyy-MM-dd").format(firstDayOfMonth);
-		var toDate = endOfMonth(firstDayOfMonth);
+		var toDate = DateFuncs.endOfMonth(firstDayOfMonth);
 		
 		db.readTransaction(function (tx) {
 			tx.executeSql(sql, 
@@ -116,53 +85,110 @@ DbFuncs = (function () {
 		});
 	};
 	
-	var lastDayOfMonth = function(month) {
-		switch(month)
-		{
-			case 1:
-				return 28;
-			case 8:
-			case 10:
-			case 3:
-				return 30;
-			default:
-				return 31;
-		}	
-	};
+	//	Helper Private Methods
 	
-	var endOfMonth = function(firstDateOfMonth) {
-		var day = lastDayOfMonth(firstDateOfMonth.getMonth());
-		
-		var endDate = new Date(firstDateOfMonth.getFullYear(), firstDateOfMonth.getMonth(), day);
-		return new JsSimpleDateFormat("yyyy-MM-dd").format(endDate);
-	};
-	
-	var monthNameToNum = function(monthName) {
-		switch(monthName)
+	var createClassStudentsSql = function(includeAbsencesParam) {
+		if (!includeAbsencesParam) 
 		{
-		case 'Σεπτέμβριος':
-			return 8;
-		case 'Οκτώβριος':
-			return 9;
-		case 'Νοέμβριος':
-			return 10;
-		case 'Δεκέμβριος':
-			return 11;
-		case 'Ιανουάριος':
-			return 0;
-		case 'Φεβρουάριος':
-			return 1;
-		case 'Μάρτιος':
-			return 2;
-		case 'Απρίλιος':
-			return 3;
-		case 'Μάιος':
-			return 4;
+			return 'SELECT S.*, 0 as UNEXCUSED, 0 as EXCUSED ' + 
+				'FROM STUDENTS S INNER JOIN CLASS_STUDENTS CS ON S.STUDENTID = CS.STUDENTID ' +
+				'WHERE CS.CLASSID=? ' +
+				'GROUP BY S.STUDENTID ORDER BY S.STUDENTID ';
 		}
+		else
+		{
+			return 'SELECT S.* , ' + sumsClause('A') + 
+				'FROM STUDENTS S INNER JOIN CLASS_STUDENTS CS ON S.STUDENTID = CS.STUDENTID ' +
+				'LEFT JOIN  ABSENCES AS A ON A.STUDENTID = S.STUDENTID WHERE CS.CLASSID=? ' +
+				'GROUP BY S.STUDENTID ORDER BY S.STUDENTID ';
+		};
 	};
 	
-	return { loadClasses: loadClasses, loadClassStudents: loadClassStudents, 
-				loadDaysWithAbsences: loadDaysWithAbsences, lastDayOfMonth: lastDayOfMonth };
+	var sumsClause = function(absencesAlias) {
+		var excusedSum = "";
+		
+		for (var i = 1; i <= 7; i++)
+			excusedSum += ' + case when ' + absencesAlias + '.H' + i + ' >= ' + 
+				AbsenceType.EXCUSED_PARENT + ' then 1 else 0 end';
+		excusedSum = excusedSum.substr(2);
+		
+		var unExcusedSum = "";
+		for (var i = 1; i <= 7; i++)
+			unExcusedSum += ' + case when ' + absencesAlias + '.H' + i + ' between 1 AND ' + 
+				(AbsenceType.EXCUSED_PARENT - 1) + ' then 1 else 0 end';
+		unExcusedSum = unExcusedSum.substr(2);
+		
+		return ' SUM(' + unExcusedSum + ') UNEXCUSED, SUM(' + excusedSum + ') EXCUSED ';
+	};
+	
+	var loadStudentAbsencesForDate = function(students, selectedDate, successCallback, errorCallback) {
+		var dateFormatted = new JsSimpleDateFormat("yyyy-MM-dd").format(selectedDate);
+		var studentIds = _.map(students, function(student){ return student.studentId; });
+		
+		var sql = 'SELECT A.STUDENTID AS STUDENTID, ' + sumsClause('A') +
+				'FROM ABSENCES A WHERE A.STUDENTID IN (' + studentIds.join() +') AND A.ABSENCESDATE=? ' +
+				'group by A.STUDENTID';
+		
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		db.readTransaction(function (tx) {
+			tx.executeSql(sql, [dateFormatted], 
+				function (tx, results) {
+					var len = results.rows.length;
+					if (len === 0)
+					{
+						successCallback(students);
+						return;
+					}
+					for (var i = 0; i < len; i++){
+						var row = results.rows.item(i);
+						var id = row.STUDENTID;
+						var student = _.find(students, function(s){ return s.studentId === id; });
+						if (student)
+						{
+							student.unexcusedAbsencesCount = row.UNEXCUSED;
+							student.excusedAbsencesCount = row.EXCUSED;
+						}
+					}
+					successCallback(students);
+				}, 
+				function (tx, e) {
+					errorCallback(JSON.stringify(e));
+			});
+		});
+	};
+	
+	var loadStudentsFromDb = function(sql, classId, successCallback, errorCallback) {
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		db.readTransaction(function (tx) {
+			tx.executeSql(sql, [classId], 
+				function (tx, results) {
+					var len = results.rows.length, res = [];
+					if (len === 0)
+					{
+						successCallback();
+						return;
+					}
+					for (var i = 0; i < len; i++){
+						var row = results.rows.item(i);
+						res.push(new Student(row.studentId, row.firstName, row.lastName, row.fatherName, row.motherName,
+							row.UNEXCUSED, row.EXCUSED));
+					}
+					successCallback(res);
+				}, 
+				function (tx, e) {
+					errorCallback(JSON.stringify(e));
+			});
+		});
+	}
+	
+	//	End of Helper  Methods
+	
+	return { 
+		loadClasses: loadClasses, 
+		loadClassStudents: loadClassStudents, 
+		loadDaysWithAbsences: loadDaysWithAbsences,
+		loadClassStudentsForDate: loadClassStudentsForDate
+	};
 
 })();
 

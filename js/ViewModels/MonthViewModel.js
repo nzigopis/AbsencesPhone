@@ -25,7 +25,7 @@ MonthViewModel = function (selectedClass, firstDateOfMonth, myLog) {
 	
 	self.addDay = function() {
 		var newDate = new Date(self.newDate().getFullYear(), self.newDate().getMonth(), self.newDate().getDate());
-		if (containsDate(self.daysWithAbsences, newDate))
+		if (containsDate(self.daysWithAbsences, newDate) || newDate.getDay() === 0 || newDate.getDay() === 6)
 			return;
 
 		self.daysWithAbsences.push(newDate);
@@ -49,7 +49,7 @@ MonthViewModel = function (selectedClass, firstDateOfMonth, myLog) {
 		var fmt = new JsSimpleDateFormat("yyyy-MM-dd")
 		var year = firstDateOfMonth.getFullYear();
 		var month = firstDateOfMonth.getMonth();
-		var days = _.range(1, DbFuncs.lastDayOfMonth(firstDateOfMonth));
+		var days = _.range(1, DateFuncs.lastDayOfMonth(firstDateOfMonth));
 		var monthDates = _.map(days, function(num){ return new Date(year, month, num); });
 		var allowedDates = _.filter(monthDates, function (d) { 
 			return d.getDay() > 0 && d.getDay() < 6 && !containsDate(daysWithAbsences, d); });
