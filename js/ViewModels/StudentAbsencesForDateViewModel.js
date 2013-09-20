@@ -12,25 +12,27 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
 
     self.log = myLog || function(err) { console.log(err); };
 
-    self.absenceTypes = ko.observableArray([
-        new AbsenceType(0, ''),
-        new AbsenceType(AbsenceEnum.UNEXCUSED_FIRST, 'Αδικ/1η ώρα'),
-        new AbsenceType(AbsenceEnum.UNEXCUSED_MIDDLE, 'Αδικ/Ενδ. ώρα'),
-        new AbsenceType(AbsenceEnum.UNEXCUSED_LAST, 'Αδικ/Τελ. ώρα'),
-        new AbsenceType(AbsenceEnum.EXPELLED_SINGLE, 'Αποβ/1 ώρα'),
-        new AbsenceType(AbsenceEnum.EXPELLED_DAILY, 'Αποβ/Ολοήμ.'),
-        new AbsenceType(AbsenceEnum.EXCUSED_PARENT, 'Δικ/Κηδ.'),
-        new AbsenceType(AbsenceEnum.EXCUSED_DAILY_PARENT, 'Δικ/Κηδ-Ολοημ.'),
-        new AbsenceType(AbsenceEnum.EXCUSED_DOCTOR, 'Δικ/Ιατρό'),
-        new AbsenceType(AbsenceEnum.EXCUSED_HEAD, 'Δικ/Διευθ.')
-    ]);
+	var absenceTypesArray = function() {
+		return [{id:AbsenceEnum.UNEXCUSED_FIRST, d:'Αδικ/1η ώρα'},
+			{id:AbsenceEnum.UNEXCUSED_MIDDLE, d:'Αδικ/Ενδ. ώρα'},
+			{id:AbsenceEnum.UNEXCUSED_LAST, d:'Αδικ/Τελ. ώρα'},
+			{id:AbsenceEnum.EXPELLED_SINGLE, d:'Αποβ/1 ώρα'},
+			{id:AbsenceEnum.EXPELLED_DAILY, d:'Αποβ/Ολοήμ.'},
+			{id:AbsenceEnum.EXCUSED_PARENT, d:'Δικ/Κηδ.'},
+			{id:AbsenceEnum.EXCUSED_DAILY_PARENT, d:'Δικ/Κηδ-Ολοημ.'},
+			{id:AbsenceEnum.EXCUSED_DOCTOR, d:'Δικ/Ιατρό'},
+			{id:AbsenceEnum.EXCUSED_HEAD, d:'Αδικ/Ενδ. ώρα'},
+			{id:AbsenceEnum.EXCUSED_DAILY_PARENT, d:'Δικ/Διευθ.'}];
+	};
 	
+    self.h1Array = ko.observableArray(absenceTypesArray());
 	self.h1 = ko.observable();
+	
 	self.h2 = ko.observable();
 
     self.save = function() 
 	{
-		self.log(self.h1a());
+		self.log(self.h1());
 	};
 	
     loadStudentAbsencesForDateFunc = loadStudentAbsencesForDateFunc || 
@@ -39,21 +41,25 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
         function(a) { 
             try 
             {
-				self.h1(a.h1);
-				self.h2(a.h2);
+//				self.h1(a.h1);
+//				self.h2(a.h2);
 				
-//				var a1 = _.find(self.absenceTypes(), function(ab){ return ab.absenceValue === a.h1; });
-//				self.h1a(a1); 
+				var a1 = _.find(self.h1Array(), function(ab){ return ab.id === a.h1; });
+				self.h1(a1); 
 //				$("#h1").val(a.h1);
-//                window.setTimeout(function() 
-//				{
-//					$("#h1").selectmenu('refresh', true);
-//				}, 100);
+                $("#h1").selectmenu("refresh", true);
+				
+				window.setTimeout(function() 
+				{
+					$("#h1").selectmenu("refresh", true);
+				}, 1000);
             } 
             catch (e)
             {
                 self.log(JSON.stringify(e));
             }
     });
+	
+	
 };
 

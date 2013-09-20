@@ -7,6 +7,20 @@ IndexViewModel = function () {
     self.loginMessage = ko.observable("");
 	self.log = ko.observable("");
 	
+	self.items = ko.observableArray([{id: 0, d: 'zero'},{id: 1, d: 'one'},{id: 2, d: 'two'},{id: 3, d: 'three'}]);
+	self.anItem = ko.observable();
+	self.secItem= ko.observable();
+	
+	window.setTimeout(function() { 
+		self.anItem(self.items()[2]); 
+		self.secItem(self.items()[3]); 
+//		var myselect = $("#s1");
+//		myselect[0].selectedIndex = 3;
+//		$("#s1").selectmenu();
+		$("#s1").selectmenu("refresh");
+		$("#s2").selectmenu("refresh");
+	}, 100)
+	
 	var errorLabel = self.loginMessage;
         
     self.login = function () {

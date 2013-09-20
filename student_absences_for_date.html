@@ -18,58 +18,10 @@
 
 		<h4 data-bind='text: selectedStudent.studentInfo()'></h4>
 		
-		<div data-role="fieldcontain">
-			<label for='h1'>1η Ώρα</label>
-			<select id="h1" name="h1" data-bind="value: h1">
-				<option value="0"></option>
-				<option value="1">Αδικ/1η ώρα</option>
-				<option value="2">Αδικ/Ενδ. ώρα</option>
-				<option value="3">Αδικ/Τελ. ώρα</option>
-				<option value="4">Αποβ/1 ώρα</option>
-				<option value="5">Αποβ/Ολοήμ.</option>
-				<option value="101">Δικ/Κηδ.</option>
-				<option value="102">Δικ/Κηδ-Ολοημ.</option>
-				<option value="103">Δικ/Ιατρό</option>
-				<option value="104">Δικ/Διευθ.</option>
-			</select>
-		</div>
-		
-		<div data-role="fieldcontain">
-			<label for='h2'>2η Ώρα</label>
-			<select id="h2" name="h2" data-bind="value: h2">
-				<option value="0"></option>
-				<option value="1">Αδικ/1η ώρα</option>
-				<option value="2">Αδικ/Ενδ. ώρα</option>
-				<option value="3">Αδικ/Τελ. ώρα</option>
-				<option value="4">Αποβ/1 ώρα</option>
-				<option value="5">Αποβ/Ολοήμ.</option>
-				<option value="101">Δικ/Κηδ.</option>
-				<option value="102">Δικ/Κηδ-Ολοημ.</option>
-				<option value="103">Δικ/Ιατρό</option>
-				<option value="104">Δικ/Διευθ.</option>
-			</select>
-		</div>
-		
-		<button data-bind="click: save">Αποθήκευση</button>
-			
-<!--		<ul data-role="listview" data-bind="foreach: ['h1','h2','h3']">
-			<li>
-				<div data-role="fieldcontain">
-                    <label data-bind="text: $data, for: $data"></label>
-                    <select data-bind="value: $root.h1a, id: $data">
-                        <option value="0"></option>
-                        <option value="1">Αδικαιολόγητη (1η ώρα)</option>
-                        <option value="2">Αδικαιολόγητη (Ενδιάμεση ώρα)</option>
-                        <option value="3">Αδικαιολόγητη (Τελευταία ώρα)</option>
-                        <option value="4">Αποβολή (1 ώρα)</option>
-                        <option value="5">Αποβολή (Ολοήμερη)</option>
-                        <option value="6">Αδικαιολόγητη (Τελευταία ώρα)</option>
-                        
-                   </select>
-                </div>
-			</li>
-		</ul>-->
-
+		<!--<form action = "?" method="post" name="form" id = "form">-->
+			<select id="h1" data-bind="value: h1, options: h1Array, optionsText: 'd'"></select>
+			<button data-bind="click: save">Αποθήκευση</button>
+		<!--</form>-->
 	</div>
 		
 	</div>
@@ -78,7 +30,8 @@
 
 </html>
 
-<!--                    <select id="h1" name="h1" data-bind="options: absenceTypes, optionsText: 'absenceDescription'"></select>
+
+<!-- <select id="h1" name="h1" data-bind="options: absenceTypes, optionsText: 'absenceDescription'"></select>
                     <button data-bind="click: save"></button>-->
 <!--					<select name="car_uses" id="car_uses" 
 		data-bind="options: carUses, optionsText: 'DESCRIPTION', value: selectedCarUse, optionsCaption: carUsesCaption"
