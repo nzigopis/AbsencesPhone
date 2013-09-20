@@ -4,16 +4,17 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
 
     self.selectedDate = selectedDate || PageStateManager.currentDate;
     if (selectedDate) 
-            PageStateManager.currentDate = selectedDate;
+		PageStateManager.currentDate = selectedDate;
 
     self.selectedStudent = selectedStudent || PageStateManager.currentStudent;
     if (selectedStudent) 
-            PageStateManager.currentStudent = selectedStudent;
+		PageStateManager.currentStudent = selectedStudent;
 
     self.log = myLog || function(err) { console.log(err); };
 
 	var absenceTypesArray = function() {
-		return [{id:AbsenceEnum.UNEXCUSED_FIRST, d:'Αδικ/1η ώρα'},
+		return [{id:0, d:''},
+			{id:AbsenceEnum.UNEXCUSED_FIRST, d:'Αδικ/1η ώρα'},
 			{id:AbsenceEnum.UNEXCUSED_MIDDLE, d:'Αδικ/Ενδ. ώρα'},
 			{id:AbsenceEnum.UNEXCUSED_LAST, d:'Αδικ/Τελ. ώρα'},
 			{id:AbsenceEnum.EXPELLED_SINGLE, d:'Αποβ/1 ώρα'},
@@ -24,15 +25,13 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
 			{id:AbsenceEnum.EXCUSED_HEAD, d:'Αδικ/Ενδ. ώρα'},
 			{id:AbsenceEnum.EXCUSED_DAILY_PARENT, d:'Δικ/Διευθ.'}];
 	};
-	
-    self.h1Array = ko.observableArray(absenceTypesArray());
-	self.h1 = ko.observable();
-	
-	self.h2 = ko.observable();
 
+    self.comboData = _.invoke(_.range(7), absenceTypesArray);
+	self.absences = _.invoke(_.range(7), ko.observable);
+	
     self.save = function() 
 	{
-		self.log(self.h1());
+		
 	};
 	
     loadStudentAbsencesForDateFunc = loadStudentAbsencesForDateFunc || 
@@ -41,18 +40,22 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
         function(a) { 
             try 
             {
-//				self.h1(a.h1);
-//				self.h2(a.h2);
+				var finder = function(what) { 
+					return function(ab){ return ab.id === what; }
+				};
+				_.each(_.range(7), 
+					function(i) {
+						var ax = a["h" + (i+1)];
+						var absence = _.find(self.comboData[i], finder(ax));
+						self.absences[i](absence); 
+					}
+				)
 				
-				var a1 = _.find(self.h1Array(), function(ab){ return ab.id === a.h1; });
-				self.h1(a1); 
-//				$("#h1").val(a.h1);
-                $("#h1").selectmenu("refresh", true);
+//                $("#h1").selectmenu("refresh", true);
 				
-				window.setTimeout(function() 
-				{
-					$("#h1").selectmenu("refresh", true);
-				}, 1000);
+				setTimeout(function() {
+					_.each(_.range(7), function(j) {$("#h"+(j+1)).selectmenu("refresh", true);});
+					}, 1000);
             } 
             catch (e)
             {

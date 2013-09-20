@@ -18,10 +18,44 @@
 
 		<h4 data-bind='text: selectedStudent.studentInfo()'></h4>
 		
-		<!--<form action = "?" method="post" name="form" id = "form">-->
-			<select id="h1" data-bind="value: h1, options: h1Array, optionsText: 'd'"></select>
-			<button data-bind="click: save">Αποθήκευση</button>
-		<!--</form>-->
+		<div data-role="fieldcontain">
+			<label for="h1" >1η Ώρα:</label>
+			<select data-bind="value: absences[0], options: comboData[0], optionsText: 'd'"
+					id="h1" name="h1" data-mini="true"></select>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="h2" >2η Ώρα:</label>
+			<select data-bind="value: absences[1], options: comboData[1], optionsText: 'd'"
+					id="h2" name="h2" data-mini="true"></select>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="h3" >3η Ώρα:</label>
+			<select data-bind="value: absences[2], options: comboData[2], optionsText: 'd'"
+					id="h3" name="h3" data-mini="true"></select>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="h4" >4η Ώρα:</label>
+			<select data-bind="value: absences[3], options: comboData[3], optionsText: 'd'"
+					id="h4" name="h4" data-mini="true"></select>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="h5" >5η Ώρα:</label>
+			<select data-bind="value: absences[4], options: comboData[4], optionsText: 'd'"
+					id="h5" name="h5" data-mini="true"></select>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="h6" >6η Ώρα:</label>
+			<select data-bind="value: absences[5], options: comboData[5], optionsText: 'd'"
+					id="h6" name="h6" data-mini="true"></select>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="h7" >7η Ώρα:</label>
+			<select data-bind="value: absences[6], options: comboData[6], optionsText: 'd'"
+					id="h7" name="h7" data-mini="true"></select>
+		</div>
+
+		<button data-bind="click: save">Αποθήκευση</button>
+		
 	</div>
 		
 	</div>
