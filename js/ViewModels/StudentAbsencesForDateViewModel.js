@@ -25,7 +25,8 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
         new AbsenceType(AbsenceEnum.EXCUSED_HEAD, 'Δικ/Διευθ.')
     ]);
 	
-	self.h1a = ko.observable();
+	self.h1 = ko.observable();
+	self.h2 = ko.observable();
 
     self.save = function() 
 	{
@@ -38,9 +39,11 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
         function(a) { 
             try 
             {
-//				self.h1a(a.h1);
-				var a1 = _.find(self.absenceTypes(), function(ab){ return ab.absenceValue === a.h1; });
-				self.h1a(a1); 
+				self.h1(a.h1);
+				self.h2(a.h2);
+				
+//				var a1 = _.find(self.absenceTypes(), function(ab){ return ab.absenceValue === a.h1; });
+//				self.h1a(a1); 
 //				$("#h1").val(a.h1);
 //                window.setTimeout(function() 
 //				{
