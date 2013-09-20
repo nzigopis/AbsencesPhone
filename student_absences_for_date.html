@@ -18,38 +18,48 @@
 
 		<h4 data-bind='text: selectedStudent.studentInfo()'></h4>
 		
-		<div data-role="fieldcontain">
-			<label for="h1" >1η Ώρα:</label>
+		<table style="width: 100%">
+			<tr>
+				<td>
+				<label for="h1" >1η Ώρα:</label>
+				</td>
+				<td>
 			<select data-bind="value: absences[0], options: comboData[0], optionsText: 'd'"
 					id="h1" name="h1" data-mini="true"></select>
+					</td>
+			</tr>
+		</table>
+			
+		<div data-role="fieldcontain">
+			
 		</div>
 		<div data-role="fieldcontain">
-			<label for="h2" >2η Ώρα:</label>
+			<label for="h2" >2η:</label>
 			<select data-bind="value: absences[1], options: comboData[1], optionsText: 'd'"
 					id="h2" name="h2" data-mini="true"></select>
 		</div>
 		<div data-role="fieldcontain">
-			<label for="h3" >3η Ώρα:</label>
+			<label for="h3" >3η:</label>
 			<select data-bind="value: absences[2], options: comboData[2], optionsText: 'd'"
 					id="h3" name="h3" data-mini="true"></select>
 		</div>
 		<div data-role="fieldcontain">
-			<label for="h4" >4η Ώρα:</label>
+			<label for="h4" >4η:</label>
 			<select data-bind="value: absences[3], options: comboData[3], optionsText: 'd'"
 					id="h4" name="h4" data-mini="true"></select>
 		</div>
 		<div data-role="fieldcontain">
-			<label for="h5" >5η Ώρα:</label>
+			<label for="h5" >5η:</label>
 			<select data-bind="value: absences[4], options: comboData[4], optionsText: 'd'"
 					id="h5" name="h5" data-mini="true"></select>
 		</div>
 		<div data-role="fieldcontain">
-			<label for="h6" >6η Ώρα:</label>
+			<label for="h6" >6η:</label>
 			<select data-bind="value: absences[5], options: comboData[5], optionsText: 'd'"
 					id="h6" name="h6" data-mini="true"></select>
 		</div>
 		<div data-role="fieldcontain">
-			<label for="h7" >7η Ώρα:</label>
+			<label for="h7" >7η:</label>
 			<select data-bind="value: absences[6], options: comboData[6], optionsText: 'd'"
 					id="h7" name="h7" data-mini="true"></select>
 		</div>
