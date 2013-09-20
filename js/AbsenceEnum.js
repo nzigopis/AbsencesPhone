@@ -1,4 +1,4 @@
-AbsenceType = (function() {
+AbsenceEnum = (function() {
 	return { 
 		UNEXCUSED_FIRST: 1, 
 		UNEXCUSED_MIDDLE: 2,

@@ -18,16 +18,14 @@
 
 		<h4 data-bind='text: selectedStudent.studentInfo()'></h4>
                 
-                <div data-role="fieldcontain">
-                    <label for="h1">1η Ώρα:</label>
-                    <select id="h1" data-bind="value: h1a, options: absenceTypes, optionsText: 'desc'"></select>
-                    
-                    <!--<span data-bind="text: absences()[0]"></span>-->
-<!--                    <select name="h1"  
-                        data-bind="value: absences()[0], jqmoptions: absenceTypes, optionsValue: 'id', optionsText: 'desc'">
-                    </select>-->
-                    
-<!--                    <select name='h11' id='h11' data-bind="value: absences()[0]">
+			<select id="h1" name="h1" data-bind="value:h1a, options: absenceTypes, optionsText: 'absenceDescription'"></select>
+            <button data-bind="click: save"></button>
+			
+<!--		<ul data-role="listview" data-bind="foreach: ['h1','h2','h3']">
+			<li>
+				<div data-role="fieldcontain">
+                    <label data-bind="text: $data, for: $data"></label>
+                    <select data-bind="value: $root.h1a, id: $data">
                         <option value="0"></option>
                         <option value="1">Αδικαιολόγητη (1η ώρα)</option>
                         <option value="2">Αδικαιολόγητη (Ενδιάμεση ώρα)</option>
@@ -36,20 +34,11 @@
                         <option value="5">Αποβολή (Ολοήμερη)</option>
                         <option value="6">Αδικαιολόγητη (Τελευταία ώρα)</option>
                         
-                   </select>-->
-                </div>
-
-<!--                <div data-role="fieldcontain">
-                    <label for='h1'>1η Ωρα</label>
-                    <input type="text" name="h3" id="h3" autocomplete="off" data-bind="value: absences().h3">
-                    <select name='h1' id='h1' data-bind="value: absences()[3]">
-                        <option value="0"></option>
-                        <option value="1">Αδικαιολόγητη (1η ώρα)</option>
-                        <option value="2">Αδικαιολόγητη (Ενδιάμεση ώρα)</option>
-                        <option value="3">Αδικαιολόγητη (Τελευταία ώρα)</option>
                    </select>
-                </div>-->
-                
+                </div>
+			</li>
+		</ul>-->
+
 	</div>
 		
 	</div>
@@ -58,6 +47,15 @@
 
 </html>
 
+<!--                    <select id="h1" name="h1" data-bind="options: absenceTypes, optionsText: 'absenceDescription'"></select>
+                    <button data-bind="click: save"></button>-->
+<!--					<select name="car_uses" id="car_uses" 
+		data-bind="options: carUses, optionsText: 'DESCRIPTION', value: selectedCarUse, optionsCaption: carUsesCaption"
+		class="right" ></select>-->
+                    <!--<span data-bind="text: absences()[0]"></span>-->
+<!--                    <select name="h1"  
+                        data-bind="value: absences()[0], jqmoptions: absenceTypes, optionsValue: 'id', optionsText: 'desc'">
+                    </select>-->
 <!--<ul data-role="listview" data-bind="foreach: absences">
                     <li>
                         <div data-role="fieldcontain">

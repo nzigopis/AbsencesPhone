@@ -129,13 +129,13 @@ DbFuncs = (function () {
 		
 		for (var i = 1; i <= 7; i++)
 			excusedSum += ' + case when ' + absencesAlias + '.H' + i + ' >= ' + 
-				AbsenceType.EXCUSED_PARENT + ' then 1 else 0 end';
+				AbsenceEnum.EXCUSED_PARENT + ' then 1 else 0 end';
 		excusedSum = excusedSum.substr(2);
 		
 		var unExcusedSum = "";
 		for (var i = 1; i <= 7; i++)
 			unExcusedSum += ' + case when ' + absencesAlias + '.H' + i + ' between 1 AND ' + 
-				(AbsenceType.EXCUSED_PARENT - 1) + ' then 1 else 0 end';
+				(AbsenceEnum.EXCUSED_PARENT - 1) + ' then 1 else 0 end';
 		unExcusedSum = unExcusedSum.substr(2);
 		
 		return ' SUM(' + unExcusedSum + ') UNEXCUSED, SUM(' + excusedSum + ') EXCUSED ';
