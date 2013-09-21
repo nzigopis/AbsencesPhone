@@ -7,7 +7,8 @@
 
 <body>
 	
-	<div id="info-page" data-role="page" data-viewModel="ClassStudentsViewModel">
+	<div id="info-page" data-role="page" 
+		 data-viewModel="ClassStudentsViewModel">
 		
 	<div data-role="header" data-bind='text: selectedClass.classDescription' style="text-align: center;"></div>
 
@@ -15,7 +16,7 @@
 
 	<!-- Add anything new in this segment -->
 
-	<div data-role="collapsible" data-inset="false">
+<!--	<div data-role="collapsible" data-inset="false">
 		<h4>Επιλέξτε Μαθητή.</h4>
 		<ul data-role="listview" data-bind="foreach: students" data-filter="true">
 			<li>
@@ -23,16 +24,16 @@
 				<span data-bind="text: studentAbsences()" class="ui-li-count"></span>
 			</li>
 		</ul>
-	</div>
+	</div>-->
 
-	<div data-role="collapsible" data-inset="false">
-		<h4>Επιλέξτε Μήνα.</h4>
+<!--	<div data-role="collapsible" data-inset="false">
+		<h4>Επιλέξτε Μήνα.</h4>-->
 		<ul data-role="listview" data-bind="foreach: months">
 			<li>
 				<a href="#" data-bind='text: new JsSimpleDateFormat("MMMM yyyy", "el").format($data), click: $parent.selectMonth'></a>
 			</li>
 		</ul>
-	</div>
+	<!--</div>-->
 	
 	<!-- End of additions area -->
 

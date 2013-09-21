@@ -30,14 +30,14 @@ ClassStudentsViewModel = function (selectedClass, myLog) {
         PageStateManager.changePage('month.html', new MonthViewModel(self.selectedClass, selectedMonth));
     };
 	
-	DbFuncs.loadClassStudents(self.selectedClass, function(data) { 
-		try 
-		{
-			self.students(data); 
-		} 
-		catch (e)
-		{
-			self.log(JSON.stringify(e));
-		}
-	});
+//	DbFuncs.loadClassStudents(self.selectedClass, function(data) { 
+//		try 
+//		{
+//			self.students(data); 
+//		} 
+//		catch (e)
+//		{
+//			self.log(JSON.stringify(e));
+//		}
+//	});
 }

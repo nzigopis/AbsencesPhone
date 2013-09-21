@@ -34,6 +34,11 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
 		
 	};
 	
+	self.headerData = function() {
+		return (selectedStudent ? selectedStudent.studentInfo() : '') + ' - ' +
+				(selectedDate ? new JsSimpleDateFormat("dd/MMM/yyyy", "el").format(selectedDate) : '');
+	};
+	
     loadStudentAbsencesForDateFunc = loadStudentAbsencesForDateFunc || 
                     DbFuncs.loadStudentAbsencesForDate;
     loadStudentAbsencesForDateFunc(self.selectedStudent, self.selectedDate, 
