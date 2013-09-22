@@ -1,4 +1,4 @@
-StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadStudentAbsencesForDateFunc, myLog) {
+StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadAbsencesFunc, myLog) {
 	
     self = this;
 
@@ -10,6 +10,9 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
     if (selectedStudent) 
 		PageStateManager.currentStudent = selectedStudent;
 
+  	self.headerData = (selectedStudent ? selectedStudent.studentInfo() : '') + ' - ' +
+		(selectedDate ? new JsSimpleDateFormat("dd/MMM/yyyy", "el").format(selectedDate) : '');
+	
     self.log = myLog || function(err) { console.log(err); };
 
 	var absenceTypesArray = function() {
@@ -29,37 +32,43 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
     self.comboData = _.invoke(_.range(7), absenceTypesArray);
 	self.absences = _.invoke(_.range(7), ko.observable);
 	
+	var absenceChanged = function(newValue, index, absence) {
+		console.log(newValue, index, JSON.stringify(absence()));
+	};
+	
+	var enableSubscriptions = function() {
+		_.each(self.absences, function(elem, index) { 
+			elem.subscribe(function f(newValue) { 
+				absenceChanged(newValue, index, elem); 
+			}); 
+		});
+	};
+	
     self.save = function() 
 	{
 		
 	};
 	
-	self.headerData = function() {
-		return (selectedStudent ? selectedStudent.studentInfo() : '') + ' - ' +
-				(selectedDate ? new JsSimpleDateFormat("dd/MMM/yyyy", "el").format(selectedDate) : '');
-	};
-	
-    loadStudentAbsencesForDateFunc = loadStudentAbsencesForDateFunc || 
-                    DbFuncs.loadStudentAbsencesForDate;
-    loadStudentAbsencesForDateFunc(self.selectedStudent, self.selectedDate, 
+  (loadAbsencesFunc || DbFuncs.loadStudentAbsencesForDate)(
+		self.selectedStudent, self.selectedDate, 
         function(a) { 
             try 
             {
-				var finder = function(what) { 
-					return function(ab){ return ab.id === what; }
-				};
 				_.each(_.range(7), 
 					function(i) {
 						var ax = a["h" + (i+1)];
-						var absence = _.find(self.comboData[i], finder(ax));
+						var absence = _.find(self.comboData[i], function(ab){ return ab.id === ax; });
 						self.absences[i](absence); 
 					}
 				)
 				
-//                $("#h1").selectmenu("refresh", true);
-				
 				setTimeout(function() {
-					_.each(_.range(7), function(j) {$("#h"+(j+1)).selectmenu("refresh", true);});
+					_.each(_.range(7), function(j) {
+						var aCombo = $("#h"+(j+1)); 
+						if (aCombo)
+							aCombo.selectmenu("refresh", true);
+					});
+					enableSubscriptions();
 					}, 1000);
             } 
             catch (e)
@@ -70,4 +79,3 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadSt
 	
 	
 };
-
