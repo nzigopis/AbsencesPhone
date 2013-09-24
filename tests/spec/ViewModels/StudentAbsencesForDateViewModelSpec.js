@@ -14,29 +14,15 @@ describe("Absence Type Modification Tests", function () {
         });
 
 		// Set second absence as first hour 
-        vm.absences[1](vm.comboData[1][1]);
+        vm.absences[1](AbsenceEnum.UNEXCUSED_FIRST);
 		
-        expect(vm.absences[0]).toEqual(0);
+        expect(vm.absences[0]()).toEqual(0);
+		expect(vm.absences[1]()).toEqual(AbsenceEnum.UNEXCUSED_FIRST);
     });
 
-//    it("should callback(SERVER_FILE_STATUS.NOT_FOUND) if file on server DOES NOT EXIST", function () {
-//
-//        downloader = new FileDownloader(function () {
-//            return getXhrMock(4, 404);
-//        });
-//
-//        runs(function () {
-//            downloader.download(callback, 'where is it ?.html', 'external_html', new Date());
-//        });
-//
-//        waitsFor(function () {
-//            return status != null;
-//        }, "AJAX call not completed within 3''", 3000);
-//
-//        runs(function () {
-//            expect(status).toEqual(SERVER_FILE_STATUS.NOT_FOUND);
-//        });
-//    });
+
+});
+
 
 //    it("should callback(SERVER_FILE_STATUS.MODIFIED, <new html data>) if file on server Modified", function () {
 //
@@ -85,6 +71,3 @@ describe("Absence Type Modification Tests", function () {
 //
 //        return xhr;
 //    };
-
-
-});

@@ -1,5 +1,6 @@
 AbsenceEnum = (function() {
 	return { 
+		NOT_ABSENT: 0, 
 		UNEXCUSED_FIRST: 1, 
 		UNEXCUSED_MIDDLE: 2,
 		UNEXCUSED_LAST: 3,

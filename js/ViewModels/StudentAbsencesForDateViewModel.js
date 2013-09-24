@@ -17,7 +17,7 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadAb
 
 	self.absenceName = function (a) {
 		switch (a) {
-			case 0: return '';
+			case AbsenceEnum.NOT_ABSENT: return '';
 			case AbsenceEnum.UNEXCUSED_FIRST: return 'Αδικ/1η ώρα';
 			case AbsenceEnum.UNEXCUSED_MIDDLE: return 'Αδικ/Ενδ. ώρα';
 			case AbsenceEnum.UNEXCUSED_LAST: return 'Αδικ/Τελ. ώρα';
@@ -29,14 +29,16 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadAb
 			default: return '';
 		};
 	};
-	self.absenceIds = [0];
+	
+	self.absenceIds = [];
 	for (var absenceId in AbsenceEnum)
 		self.absenceIds.push(AbsenceEnum[absenceId]);
 
 	self.absences = _.invoke(_.range(7), ko.observable);
 	
 	var absenceChanged = function(newValue, index, absence) {
-		console.log(newValue, index, JSON.stringify(absence()));
+//		console.log(newValue, index, JSON.stringify(absence()));
+		
 	};
 	
 	var enableSubscriptions = function() {
