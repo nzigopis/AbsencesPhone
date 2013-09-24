@@ -53,7 +53,8 @@ DbFuncs = (function () {
 			'FROM ABSENCES A INNER JOIN CLASS_STUDENTS CS ON A.STUDENTID=CS.STUDENTID ' +
 			'WHERE CS.CLASSID=? AND A.ABSENCESDATE BETWEEN ? AND ? ' +
 			'ORDER BY absencesDate';
-		var fromDate = new JsSimpleDateFormat("yyyy-MM-dd").format(firstDayOfMonth);
+		var fmt = new JsSimpleDateFormat("yyyy-MM-dd");
+		var fromDate = fmt.format(firstDayOfMonth);
 		var toDate = DateFuncs.endOfMonth(firstDayOfMonth);
 		
 		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
@@ -69,7 +70,7 @@ DbFuncs = (function () {
 					}
 					for (var i = 0; i < len; i++){
 						var row = results.rows.item(i);
-						res.push(row.absencesDate);
+						res.push(fmt.parse(row.absencesDate));
 					}
 					successCallback(res);
 				}, 
@@ -91,7 +92,7 @@ DbFuncs = (function () {
 				[studentId, dateFormatted], 
 				function (tx, results) {
 					if (results.rows.length === 0)
-						successCallback(new Absences(studentId, selectedDate, 1, 0, 0, 102, 0, 4, 0));
+						successCallback(new Absences(studentId, selectedDate, 0, 0, 0, 0, 0, 0, 0));
 					else 
 					{
 						var a = results.rows.item(0);
@@ -104,6 +105,31 @@ DbFuncs = (function () {
 		});
 	};
 	
+	var saveNewAbsences = function(absences, successCallback, errorCallback) {
+		successCallback = successCallback || function() {};
+		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
+		
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		var values = [absences.studentId, new JsSimpleDateFormat('yyyy-MM-dd').format(absences.absencesDate),
+			absences.h1, absences.h2, absences.h3, absences.h4, absences.h5, absences.h6, absences.h7];
+		db.transaction(function (tx) {
+			tx.executeSql('INSERT INTO ABSENCES(studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+				values,
+				function () {
+					tx.executeSql('INSERT INTO ABSENCES_LOG(studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+						values,
+						function () { successCallback();},
+						function (t1, e) {
+							errorCallback(JSON.stringify(e));
+						}
+					);
+				},
+				function (t2, e) {
+					errorCallback(JSON.stringify(e));
+				}
+			);
+		});
+	};
 	
 	//	Helper Private Methods
 	
@@ -208,7 +234,8 @@ DbFuncs = (function () {
 		loadClassStudents: loadClassStudents, 
 		loadDaysWithAbsences: loadDaysWithAbsences,
 		loadStudentsAbsencesForClassAndDate: loadStudentsAbsencesForClassAndDate,
-		loadStudentAbsencesForDate: loadStudentAbsencesForDate
+		loadStudentAbsencesForDate: loadStudentAbsencesForDate,
+		saveNewAbsences: saveNewAbsences
 	};
 
 })();
