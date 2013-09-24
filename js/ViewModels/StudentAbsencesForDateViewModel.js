@@ -1,4 +1,5 @@
-StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadAbsencesFunc, myLog) {
+StudentAbsencesForDateViewModel = function(
+		selectedDate, selectedStudent, loadAbsencesFunc, myLog, enableSubscriptionsImmediately) {
 	
     self = this;
 
@@ -37,8 +38,16 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadAb
 	self.absences = _.invoke(_.range(7), ko.observable);
 	
 	var absenceChanged = function(newValue, index, absence) {
-//		console.log(newValue, index, JSON.stringify(absence()));
-		
+		if (newValue === AbsenceEnum.UNEXCUSED_FIRST && index > 0)
+		{
+			for (var i = 0; i < index; i++)
+				self.absences[i](AbsenceEnum.NOT_ABSENT);
+		}
+		else if (newValue === AbsenceEnum.EXPELLED_DAILY)
+		{
+			for (var i = index; i < 7; i++)
+				self.absences[i](AbsenceEnum.EXPELLED_DAILY);
+		};
 	};
 	
 	var enableSubscriptions = function() {
@@ -66,13 +75,17 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent, loadAb
 					}
 				)
 				
+				if (enableSubscriptionsImmediately)
+					enableSubscriptions();
+				
 				setTimeout(function() {
 					_.each(_.range(7), function(j) {
 						var aCombo = $("#h"+(j+1)); 
 						if (aCombo)
 							aCombo.selectmenu("refresh", true);
 					});
-					enableSubscriptions();
+					if (!enableSubscriptionsImmediately)
+						enableSubscriptions();
 					}, 1000);
             } 
             catch (e)

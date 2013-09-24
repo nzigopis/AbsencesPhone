@@ -11,13 +11,28 @@ describe("Absence Type Modification Tests", function () {
 		var s = new Student(100, 'nikos', 'zigo');
         vm = new StudentAbsencesForDateViewModel(d, s, function (student, forDate, successCallback) {
 			successCallback(new Absences(s.studentId, s, AbsenceEnum.UNEXCUSED_FIRST, 0, 0, 0, 0, 0, 0));
-        });
+			}, undefined, true);
 
 		// Set second absence as first hour 
         vm.absences[1](AbsenceEnum.UNEXCUSED_FIRST);
 		
         expect(vm.absences[0]()).toEqual(0);
 		expect(vm.absences[1]()).toEqual(AbsenceEnum.UNEXCUSED_FIRST);
+    });
+
+	it("should set N+1..7th hours as EXPELLED_DAILY if Nth hour is EXPELLED_DAILY", function () {
+
+		var d = new Date(2013, 0, 1);
+		var s = new Student(100, 'nikos', 'zigo');
+        vm = new StudentAbsencesForDateViewModel(d, s, function (student, forDate, successCallback) {
+			successCallback(new Absences(s.studentId, s, 0, 0, AbsenceEnum.UNEXCUSED_MIDDLE, 0, 0, AbsenceEnum.UNEXCUSED_MIDDLE, 0));
+			}, undefined, true);
+
+		// Set second absence as daily expulsion
+        vm.absences[1](AbsenceEnum.EXPELLED_DAILY);
+		
+		for (var i = 1; i < 7; i++)
+			expect(vm.absences[i]()).toEqual(AbsenceEnum.EXPELLED_DAILY);
     });
 
 
