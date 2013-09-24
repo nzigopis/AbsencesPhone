@@ -7,9 +7,23 @@ IndexViewModel = function () {
     self.loginMessage = ko.observable("");
 	self.log = ko.observable("");
 	
-//	self.items = ko.observableArray([{id: 0, d: 'zero'},{id: 1, d: 'one'},{id: 2, d: 'two'},{id: 3, d: 'three'}]);
-//	self.anItem = ko.observable();
+//	self.items = [0,1,2,3];
+//	self.anItem = ko.observable(3);
 //	self.secItem= ko.observable();
+//	self.names = function (n) {
+//		switch (n) {
+//			case 0:
+//				return "";
+//			case 1:
+//				return "one";
+//			case 2:
+//				return "two";
+//			case 3:
+//				return "three";
+//			default:
+//				return "more";
+//		};
+//	};
 //	
 //	window.setTimeout(function() { 
 //		self.anItem(self.items()[2]); 

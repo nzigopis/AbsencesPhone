@@ -1,29 +1,22 @@
-describe("StudentAbsencesForDateViewModel Tests", function () {
+describe("Absence Type Modification Tests", function () {
     
     beforeEach(function () {
         status = null;
         data = null;
     });
 
-    it("should callback(SERVER_FILE_STATUS.NOT_MODIFIED) if file on server Not Modified", function () {
+    it("should set 1..n-1 hours as not absent is n hour is first absence", function () {
 
 		var d = new Date(2013, 0, 1);
 		var s = new Student(100, 'nikos', 'zigo');
-        vm = new StudentAbsencesForDateViewModel(d, s, function (student, forDate) {
-			return new Absences(s.studentId, s, 1, 0, 0, 0, 0, 0, 0);
+        vm = new StudentAbsencesForDateViewModel(d, s, function (student, forDate, successCallback) {
+			successCallback(new Absences(s.studentId, s, AbsenceEnum.UNEXCUSED_FIRST, 0, 0, 0, 0, 0, 0));
         });
 
-        runs(function () {
-            vm.download(callback, 'care.html', 'external_html', new Date());
-        });
-
-        waitsFor(function () {
-            return status != null;
-        }, "AJAX call should complete within 3'' ", 3000);
-
-        runs(function () {
-            expect(status).toEqual(SERVER_FILE_STATUS.NOT_MODIFIED);
-        });
+		// Set second absence as first hour 
+        vm.absences[1](vm.comboData[1][1]);
+		
+        expect(vm.absences[0]).toEqual(0);
     });
 
 //    it("should callback(SERVER_FILE_STATUS.NOT_FOUND) if file on server DOES NOT EXIST", function () {

@@ -16,77 +16,44 @@
 
 	<div data-role="content">
 
-		<!--<h4 data-bind='text: selectedStudent.studentInfo()'></h4>-->
-		
 		<table style="width: 100%">
 			<tr>
 				<td><label for="h1" >1η Ώρα:</label></td>
-				<td><select data-bind="value: absences[0], options: comboData[0], optionsText: 'd'"
+				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[0]"
 					id="h1" name="h1" data-mini="true"></select></td>
 			</tr>
 			<tr>
 				<td><label for="h2" >2η Ώρα:</label></td>
-				<td><select data-bind="value: absences[1], options: comboData[1], optionsText: 'd'"
+				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[1]"
 					id="h2" name="h2" data-mini="true"></select></td>
 			</tr>
 			<tr>
 				<td><label for="h3" >3η Ώρα:</label></td>
-				<td><select data-bind="value: absences[2], options: comboData[2], optionsText: 'd'"
+				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[2]"
 					id="h3" name="h3" data-mini="true"></select></td>
 			</tr>
 			<tr>
 				<td><label for="h4" >4η Ώρα:</label></td>
-				<td><select data-bind="value: absences[3], options: comboData[3], optionsText: 'd'"
+				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[3]"
 					id="h4" name="h4" data-mini="true"></select></td>
 			</tr>
 			<tr>
 				<td><label for="h5" >5η Ώρα:</label></td>
-				<td><select data-bind="value: absences[4], options: comboData[4], optionsText: 'd'"
+				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[4]"
 					id="h5" name="h5" data-mini="true"></select></td>
 			</tr>
 			<tr>
 				<td><label for="h6" >6η Ώρα:</label></td>
-				<td><select data-bind="value: absences[5], options: comboData[5], optionsText: 'd'"
+				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[5]"
 					id="h6" name="h6" data-mini="true"></select></td>
 			</tr>
 			<tr>
 				<td><label for="h7" >7η Ώρα:</label></td>
-				<td><select data-bind="value: absences[6], options: comboData[6], optionsText: 'd'"
+				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[6]"
 					id="h7" name="h7" data-mini="true"></select></td>
 			</tr>
 		</table>
 			
-<!--		<div data-role="fieldcontain">
-			<label for="h2" >2η:</label>
-			<select data-bind="value: absences[1], options: comboData[1], optionsText: 'd'"
-					id="h2" name="h2" data-mini="true"></select>
-		</div>
-		<div data-role="fieldcontain">
-			<label for="h3" >3η:</label>
-			<select data-bind="value: absences[2], options: comboData[2], optionsText: 'd'"
-					id="h3" name="h3" data-mini="true"></select>
-		</div>
-		<div data-role="fieldcontain">
-			<label for="h4" >4η:</label>
-			<select data-bind="value: absences[3], options: comboData[3], optionsText: 'd'"
-					id="h4" name="h4" data-mini="true"></select>
-		</div>
-		<div data-role="fieldcontain">
-			<label for="h5" >5η:</label>
-			<select data-bind="value: absences[4], options: comboData[4], optionsText: 'd'"
-					id="h5" name="h5" data-mini="true"></select>
-		</div>
-		<div data-role="fieldcontain">
-			<label for="h6" >6η:</label>
-			<select data-bind="value: absences[5], options: comboData[5], optionsText: 'd'"
-					id="h6" name="h6" data-mini="true"></select>
-		</div>
-		<div data-role="fieldcontain">
-			<label for="h7" >7η:</label>
-			<select data-bind="value: absences[6], options: comboData[6], optionsText: 'd'"
-					id="h7" name="h7" data-mini="true"></select>
-		</div>-->
-
 		<button data-bind="click: save">Αποθήκευση</button>
 		
 	</div>
@@ -96,29 +63,3 @@
 </body>
 
 </html>
-
-
-<!-- <select id="h1" name="h1" data-bind="options: absenceTypes, optionsText: 'absenceDescription'"></select>
-                    <button data-bind="click: save"></button>-->
-<!--					<select name="car_uses" id="car_uses" 
-		data-bind="options: carUses, optionsText: 'DESCRIPTION', value: selectedCarUse, optionsCaption: carUsesCaption"
-		class="right" ></select>-->
-                    <!--<span data-bind="text: absences()[0]"></span>-->
-<!--                    <select name="h1"  
-                        data-bind="value: absences()[0], jqmoptions: absenceTypes, optionsValue: 'id', optionsText: 'desc'">
-                    </select>-->
-<!--<ul data-role="listview" data-bind="foreach: absences">
-                    <li>
-                        <div data-role="fieldcontain">
-                            <label data-bind="text: $index + 'η Ωρα'"></label>
-                            <input type="text" name="h3" id="h3" autocomplete="off" data-bind="value: absences().h3">
-                            <select data-bind="name: 'h' + $index, id: 'h' + $index" >
-                                <option value="0"></option>
-                                <option value="1">Αδικαιολόγητη (1η ώρα)</option>
-                                <option value="2">Αδικαιολόγητη (Ενδιάμεση ώρα)</option>
-                                <option value="3">Αδικαιολόγητη (Τελευταία ώρα)</option>
-                           </select>
-                        </div>
-                    </li>
-                </ul>
-		-->
