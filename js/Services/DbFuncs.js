@@ -83,6 +83,7 @@ DbFuncs = (function () {
 	var loadStudentAbsencesForDate= function (selectedStudent, selectedDate, successCallback, errorCallback) {
 		successCallback = successCallback || function(data) {};
 		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
+		
 		var dateFormatted = new JsSimpleDateFormat("yyyy-MM-dd").format(selectedDate);
 		var studentId = selectedStudent.studentId;
 		
@@ -105,20 +106,56 @@ DbFuncs = (function () {
 		});
 	};
 	
+	var updateAbsences = function(absences, successCallback, errorCallback) {
+		successCallback = successCallback || function() {};
+		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
+		
+		var d = new JsSimpleDateFormat('yyyy-MM-dd').format(absences.absencesDate);
+		var updateValues = [absences.h1, absences.h2, absences.h3, 
+			absences.h4, absences.h5, absences.h6, absences.h7, absences.studentId, d];
+		var insertValues = [absences.studentId, d, absences.h1, absences.h2, absences.h3, 
+			absences.h4, absences.h5, absences.h6, absences.h7];
+		
+		var absencesSql = 'UPDATE ABSENCES SET h1=?,h2=?,h3=?,h4=?,h5=?,h6=?,h7=? WHERE studentId=? AND absencesDate=?';
+		var absencesLogSql = 'INSERT INTO ABSENCES_LOG (studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		db.transaction(function (tx) {
+			tx.executeSql(absencesSql, updateValues,
+				function () {
+					tx.executeSql(absencesLogSql, insertValues,
+						function () { 
+							successCallback();
+						},
+						function (t1, e) {
+							errorCallback(JSON.stringify(e));
+						}
+					);
+				},
+				function (t2, e) {
+					errorCallback(JSON.stringify(e));
+				}
+			);
+		});
+	};
+	
 	var saveNewAbsences = function(absences, successCallback, errorCallback) {
 		successCallback = successCallback || function() {};
 		errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
 		
-		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
 		var values = [absences.studentId, new JsSimpleDateFormat('yyyy-MM-dd').format(absences.absencesDate),
 			absences.h1, absences.h2, absences.h3, absences.h4, absences.h5, absences.h6, absences.h7];
+		var absencesSql = 'INSERT INTO ABSENCES (studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		var absencesLogSql = 'INSERT INTO ABSENCES_LOG (studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
 		db.transaction(function (tx) {
-			tx.executeSql('INSERT INTO ABSENCES(studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-				values,
+			tx.executeSql(absencesSql, values,
 				function () {
-					tx.executeSql('INSERT INTO ABSENCES_LOG(studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-						values,
-						function () { successCallback();},
+					tx.executeSql(absencesLogSql, values,
+						function () { 
+							successCallback();
+						},
 						function (t1, e) {
 							errorCallback(JSON.stringify(e));
 						}
@@ -132,7 +169,7 @@ DbFuncs = (function () {
 	};
 	
 	//	Helper Private Methods
-	
+	//
 	var createClassStudentsSql = function(includeAbsencesParam) {
 		if (!includeAbsencesParam) 
 		{
@@ -226,7 +263,7 @@ DbFuncs = (function () {
 			});
 		});
 	}
-	
+	//
 	//	End of Helper  Methods
 	
 	return { 
@@ -235,7 +272,8 @@ DbFuncs = (function () {
 		loadDaysWithAbsences: loadDaysWithAbsences,
 		loadStudentsAbsencesForClassAndDate: loadStudentsAbsencesForClassAndDate,
 		loadStudentAbsencesForDate: loadStudentAbsencesForDate,
-		saveNewAbsences: saveNewAbsences
+		saveNewAbsences: saveNewAbsences,
+		updateAbsences: updateAbsences
 	};
 
 })();

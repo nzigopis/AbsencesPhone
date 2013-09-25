@@ -40,13 +40,28 @@ StudentAbsencesForDateViewModel = function(
 	
 	self.save = function() 
 	{
-		if (isNewEntity())
+		try
 		{
 			var o = new Absences(absencesOriginal.studentId, absencesOriginal.absencesDate, 
 				self.absences[0](), self.absences[1](), self.absences[2](), self.absences[3](), 
 				self.absences[4](), self.absences[5](), self.absences[6]());
-			DbFuncs.saveNewAbsences(o);
-		};
+
+			$.mobile.loading('show');
+			if (isNewEntity())
+				DbFuncs.saveNewAbsences(o, 
+					function() {$.mobile.loading('hide');},
+					function(e) {$.mobile.loading('hide'); alert(e);});
+			else if (isModifiedEntity())
+				DbFuncs.updateAbsences(o, 
+					function() {$.mobile.loading('hide');},
+					function(e) {$.mobile.loading('hide'); alert(e);});
+			else
+				$.mobile.loading('hide');
+		}
+		catch(err)
+		{
+			alert(err);
+		}
 	};
 	
 	var isNewEntity = function() {
@@ -55,6 +70,13 @@ StudentAbsencesForDateViewModel = function(
 					return !/h[1-7]/.test(a) || (absencesOriginal[a] === 0); 
 				}) &&
 			_.some(self.absences, function (a) { return a() !== 0; });
+	};
+	
+	var isModifiedEntity = function() {
+		return absencesOriginal && 
+			_.some(Object.keys(absencesOriginal), function (a) { 
+					return /h[1-7]/.test(a) && (absencesOriginal[a] !== self.absences[a.substring(1)]()); 
+				});
 	};
 	
 	var absenceChanged = function(newValue, index, absence) {

@@ -44,6 +44,8 @@ DbSync = (function () {
 			}
 			
 			tx.executeSql('CREATE TABLE IF NOT EXISTS ABSENCES (studentId INTEGER, absencesDate DATE, h1 INTEGER, h2 INTEGER, h3 INTEGER, h4 INTEGER, h5 INTEGER, h6 INTEGER, h7 INTEGER, PRIMARY KEY (studentId, absencesDate))');
+		
+			tx.executeSql('CREATE TABLE IF NOT EXISTS ABSENCES_LOG (Id INTEGER PRIMARY KEY AUTOINCREMENT, studentId INTEGER, absencesDate DATE, h1 INTEGER, h2 INTEGER, h3 INTEGER, h4 INTEGER, h5 INTEGER, h6 INTEGER, h7 INTEGER)');
 
 			authenticate(user, pwd);
 		}
