@@ -40,60 +40,72 @@ StudentAbsencesForDateViewModel = function(
 	
 	self.save = function() 
 	{
-		try
-		{
-			var o = new Absences(absencesOriginal.studentId, absencesOriginal.absencesDate, 
-				self.absences[0](), self.absences[1](), self.absences[2](), self.absences[3](), 
-				self.absences[4](), self.absences[5](), self.absences[6]());
+            try
+            {
+                var o = new Absences(absencesOriginal.studentId, absencesOriginal.absencesDate, 
+                    self.absences[0](), self.absences[1](), self.absences[2](), self.absences[3](), 
+                    self.absences[4](), self.absences[5](), self.absences[6]());
 
-			$.mobile.loading('show');
-			if (isNewEntity())
-				DbFuncs.saveNewAbsences(o, 
-					function() {$.mobile.loading('hide');},
-					function(e) {$.mobile.loading('hide'); alert(e);});
-			else if (isModifiedEntity())
-				DbFuncs.updateAbsences(o, 
-					function() {$.mobile.loading('hide');},
-					function(e) {$.mobile.loading('hide'); alert(e);});
-			else
-				$.mobile.loading('hide');
-		}
-		catch(err)
-		{
-			alert(err);
-		}
+                $.mobile.loading('show');
+                if (isNewEntity())
+                    DbFuncs.saveNewAbsences(o, 
+                        function() {$.mobile.loading('hide');},
+                        function(e) {$.mobile.loading('hide'); alert(e);});
+                else if (isModifiedEntity())
+                    DbFuncs.updateAbsences(o, 
+                        function() {$.mobile.loading('hide');},
+                        function(e) {$.mobile.loading('hide'); alert(e);});
+                else if (isDeletedEntity())
+                    DbFuncs.deleteAbsences(o, 
+                        function() {$.mobile.loading('hide');},
+                        function(e) {$.mobile.loading('hide'); alert(e);});
+                else
+                    $.mobile.loading('hide');
+            }
+            catch(err)
+            {
+                alert(err);
+            }
 	};
 	
 	var isNewEntity = function() {
-		return absencesOriginal && 
-			_.every(Object.keys(absencesOriginal), function (a) { 
-					return !/h[1-7]/.test(a) || (absencesOriginal[a] === 0); 
-				}) &&
-			_.some(self.absences, function (a) { return a() !== 0; });
+            return absencesOriginal && 
+                _.every(Object.keys(absencesOriginal), function (a) { 
+                        return !/h[1-7]/.test(a) || (absencesOriginal[a] === 0); 
+                    }) &&
+                _.some(self.absences, function (a) { return a() !== 0; });
 	};
 	
 	var isModifiedEntity = function() {
-		return absencesOriginal && 
-			_.some(Object.keys(absencesOriginal), function (a) { 
-					return /h[1-7]/.test(a) && (absencesOriginal[a] !== self.absences[a.substring(1)]()); 
-				});
+            return absencesOriginal && 
+                _.some(Object.keys(absencesOriginal), function (a) { 
+                        return /h[1-7]/.test(a) && (absencesOriginal[a] !== self.absences[a.substring(1)]()); 
+                    });
+	};
+	
+	var isDeletedEntity = function() {
+            return absencesOriginal && 
+                _.some(Object.keys(absencesOriginal), function (a) { 
+                      return /h[1-7]/.test(a) && (absencesOriginal[a] !== 0); 
+                    }) &&
+                _.every(self.absences, function (a) { return a() === 0; });
 	};
 	
 	var absenceChanged = function(newValue, index, absence) {
-		if (newValue === AbsenceEnum.UNEXCUSED_FIRST && index > 0)
-		{
-			for (var i = 0; i < index; i++)
-				self.absences[i](AbsenceEnum.NOT_ABSENT);
-			refreshCombos(500);
-		}
-		else if (newValue === AbsenceEnum.EXPELLED_DAILY)
-		{
-			for (var i = index; i < 7; i++)
-				self.absences[i](AbsenceEnum.EXPELLED_DAILY);
-			refreshCombos(500);
-		};
+            if (newValue === AbsenceEnum.UNEXCUSED_FIRST && index > 0)
+            {
+                for (var i = 0; i < index; i++)
+                    self.absences[i](AbsenceEnum.NOT_ABSENT);
+                refreshCombos(500);
+            }
+            else if (newValue === AbsenceEnum.EXPELLED_DAILY)
+            {
+                for (var i = index; i < 7; i++)
+                    self.absences[i](AbsenceEnum.EXPELLED_DAILY);
+                refreshCombos(500);
+            };
 	};
-	
+        
 	var subscriptionsEnabled;
 	var enableSubscriptions = function() {
 		if (subscriptionsEnabled)
@@ -123,17 +135,17 @@ StudentAbsencesForDateViewModel = function(
         function(a) { 
             try 
             {
-				absencesOriginal = a;
-				_.each(_.range(7), 
-					function(i) {
-						var ax = a["h" + (i+1)];
-						self.absences[i](ax); 
-					});
-				
-				if (enableSubscriptionsImmediately)
-					enableSubscriptions();
-				
-				refreshCombos();
+                absencesOriginal = a;
+                _.each(_.range(7), 
+                    function(i) {
+                        var ax = a["h" + (i+1)];
+                        self.absences[i](ax); 
+                    });
+
+                if (enableSubscriptionsImmediately)
+                        enableSubscriptions();
+
+                refreshCombos();
             } 
             catch (e)
             {
