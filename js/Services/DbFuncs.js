@@ -9,12 +9,12 @@ DbFuncs = (function () {
             tx.executeSql('SELECT * FROM USERS', [], 
                 function (tx, results) {
                     if (results.rows.length === 0)
-                        DbSync.pull(tx, user, pwd, authenticate, successCallback, errorCallback);
+                        DbSync.pull(user, pwd, authenticate, successCallback, errorCallback);
                     else
                         authenticate(user, pwd, successCallback, errorCallback);
                 }, 
                 function (tx, e) {
-                    DbSync.pull(tx, user, pwd, authenticate, successCallback, errorCallback);
+                    DbSync.pull(user, pwd, authenticate, successCallback, errorCallback);
                 });
         });
     };
