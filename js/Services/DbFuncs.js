@@ -34,16 +34,14 @@ DbFuncs = (function () {
                         successCallback();
                     }
                 },
-                function (e) { authenticationFail('Δεν φορτώθηκαν δεδομένα από τον server !');}
+                function (e) { 
+					$.mobile.loading('hide');
+					errorCallback('Δεν φορτώθηκαν δεδομένα από τον server !');
+				}
             );
         });
     }
 
-	var authenticationFail = function(e) {
-		errorLabel(JSON.stringify(e));
-		$.mobile.loading('hide');
-	}
-        
     var loadClasses = function (successCallback, errorCallback) {
         successCallback = successCallback || function(data) {};
         errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
