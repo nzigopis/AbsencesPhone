@@ -3,6 +3,9 @@
 
 <head>
 <title>Απουσίες Μαθητή / Ημέρας </title>
+<style>
+	.hour-label {width: 20%}
+</style>
 </head>
 
 <body>
@@ -18,37 +21,37 @@
 
 		<table style="width: 100%">
 			<tr>
-				<td><label for="h1" >1η Ώρα:</label></td>
+				<td class="hour-label"><label for="h1" >1η Ώρα:</label></td>
 				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[0]"
 					id="h1" name="h1" data-mini="true"></select></td>
 			</tr>
 			<tr>
-				<td><label for="h2" >2η Ώρα:</label></td>
+				<td class="hour-label"><label for="h2" >2η Ώρα:</label></td>
 				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[1]"
 					id="h2" name="h2" data-mini="true"></select></td>
 			</tr>
 			<tr>
-				<td><label for="h3" >3η Ώρα:</label></td>
+				<td class="hour-label"><label for="h3" >3η Ώρα:</label></td>
 				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[2]"
 					id="h3" name="h3" data-mini="true"></select></td>
 			</tr>
 			<tr>
-				<td><label for="h4" >4η Ώρα:</label></td>
+				<td class="hour-label"><label for="h4" >4η Ώρα:</label></td>
 				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[3]"
 					id="h4" name="h4" data-mini="true"></select></td>
 			</tr>
 			<tr>
-				<td><label for="h5" >5η Ώρα:</label></td>
+				<td class="hour-label"><label for="h5" >5η Ώρα:</label></td>
 				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[4]"
 					id="h5" name="h5" data-mini="true"></select></td>
 			</tr>
 			<tr>
-				<td><label for="h6" >6η Ώρα:</label></td>
+				<td class="hour-label"><label for="h6" >6η Ώρα:</label></td>
 				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[5]"
 					id="h6" name="h6" data-mini="true"></select></td>
 			</tr>
 			<tr>
-				<td><label for="h7" >7η Ώρα:</label></td>
+				<td class="hour-label"><label for="h7" >7η Ώρα:</label></td>
 				<td><select data-bind="options: absenceIds, optionsText: function(n) {return absenceName(n)}, value: absences[6]"
 					id="h7" name="h7" data-mini="true"></select></td>
 			</tr>
