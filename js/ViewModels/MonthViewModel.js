@@ -2,25 +2,25 @@ MonthViewModel = function (selectedClass, firstDateOfMonth, myLog) {
 	
 	self = this;
 	
-	self.selectedClass = selectedClass || PageStateManager.currentClass;
-	if (selectedClass) 
-		PageStateManager.currentClass = selectedClass;
+	self.selectedClass = PageStateManager.currentClass = selectedClass || PageStateManager.currentClass;
+//	if (selectedClass) 
+//		PageStateManager.currentClass = selectedClass;
 	
-	self.firstDateOfMonth = firstDateOfMonth || PageStateManager.firstDayOfCurrentMonth;
-	if (firstDateOfMonth) 
-		PageStateManager.firstDayOfCurrentMonth = firstDateOfMonth;
+	self.firstDateOfMonth = PageStateManager.firstDayOfCurrentMonth = firstDateOfMonth || PageStateManager.firstDayOfCurrentMonth;
+//	if (firstDateOfMonth) 
+//		PageStateManager.firstDayOfCurrentMonth = firstDateOfMonth;
 	
 	self.log = myLog || function(err) { 
 			console.log(err); 
 		};
 		
     self.daysWithAbsences = ko.observableArray();
-    self.newDate = ko.observable(firstDateOfMonth);
+    self.newDate = ko.observable(self.firstDateOfMonth);
 	
 	self.validDates = ko.observableArray();
 	
     self.selectDay = function(selectedDate) {
-        PageStateManager.changePage('day.html', new DayViewModel(selectedClass, selectedDate));
+        PageStateManager.changePage('day.html', new DayViewModel(self.selectedClass, selectedDate));
     };
 	
 	self.addDay = function() {
