@@ -33,8 +33,8 @@ IndexViewModel = function () {
             },
             function (error) {
                 $.mobile.loading('hide');
-                var current = self.log(); 
-                self.log(current + "\n" + error);
+//                var current = self.log(); 
+                self.log(error);
             });
             
     };

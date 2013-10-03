@@ -24,8 +24,10 @@ DbFuncs = (function () {
         db.readTransaction(function (tx) {
             tx.executeSql('SELECT * FROM USERS WHERE userName=?', [user], 
                 function (tx, results) {
-                    if (results.rows.length === 0 || results.rows.item(0).userPassword !== pwd)
+                    if (results.rows.length === 0)
                         errorCallback("Λάθος Όνομα Χρήστη !");
+					else if (results.rows.item(0).userPassword !== pwd)
+						errorCallback("Λάθος Κωδικός !");
                     else {
                         PageStateManager.yearStart = 2013;
                         PageStateManager.yearEnd = 2014;
@@ -35,7 +37,6 @@ DbFuncs = (function () {
                     }
                 },
                 function (e) { 
-					$.mobile.loading('hide');
 					errorCallback('Δεν φορτώθηκαν δεδομένα από τον server !');
 				}
             );
