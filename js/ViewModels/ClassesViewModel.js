@@ -6,7 +6,7 @@ ClassesViewModel = function () {
         
     self.selectClass = function(selectedClass) {
         
-        PageStateManager.changePage('class_students.html', new ClassStudentsViewModel(selectedClass));
+        PageStateManager.changePage('months-for-class.html', new MonthsForClassViewModel(selectedClass));
     };
 
 	DbFuncs.loadClasses(function(data) { 

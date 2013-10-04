@@ -1,4 +1,4 @@
-ClassStudentsViewModel = function (selectedClass, myLog) {
+MonthsForClassViewModel = function (selectedClass, myLog) {
 	
 	self = this;
 	

@@ -15,6 +15,6 @@ Student = function (studentId, firstName, lastName, fatherName, motherName,
 	};
 	
 	this.studentAbsences = function(){
-		return this.unexcusedAbsencesCount + ' δικ. / ' + this.excusedAbsencesCount + ' αδικ.';
+		return this.excusedAbsencesCount + ' δικ. / ' + this.unexcusedAbsencesCount + ' αδικ.';
 	};
 };

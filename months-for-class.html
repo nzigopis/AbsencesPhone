@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<title>Επιλογή Μαθητή</title>
+</head>
+
+<body>
+	
+	<div id="info-page" data-role="page" 
+		 data-viewModel="MonthsForClassViewModel">
+		
+	<div data-role="header" data-bind='text: selectedClass.classDescription' style="text-align: center;"></div>
+
+	<div data-role="content">
+		<ul data-role="listview" data-bind="foreach: months">
+			<li>
+				<a href="#" data-bind='text: new JsSimpleDateFormat("MMMM yyyy", "el").format($data), click: $parent.selectMonth'></a>
+			</li>
+		</ul>
+
+	</div>
+		
+	</div>
+	
+</body>
+
+</html>
