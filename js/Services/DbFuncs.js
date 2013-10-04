@@ -35,8 +35,15 @@ DbFuncs = (function(dbPersistence, dbLoader) {
 						else if (results.rows.item(0).userPassword !== pwd)
 							errorCallback("Λάθος Κωδικός !");
 						else {
-							PageStateManager.yearStart = 2013;
-							PageStateManager.yearEnd = 2014;
+							var d = new Date();
+							if (d.getMonth() < 7) {
+								PageStateManager.yearStart = d.getFullYear() - 1;
+								PageStateManager.yearEnd = d.getFullYear();
+							}
+							else {
+								PageStateManager.yearStart = d.getFullYear();
+								PageStateManager.yearEnd = d.getFullYear() + 1;
+							}
 							PageStateManager.userName = user;
 							PageStateManager.userPassword = pwd;
 							successCallback();

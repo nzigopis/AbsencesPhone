@@ -10,9 +10,7 @@ MonthsForClassViewModel = function (selectedClass, myLog) {
 			console.log(err); 
 		};
 		
-    self.students = ko.observableArray();
-	
-	var monthStartDates = [];
+    var monthStartDates = [];
 	for (var i = 8; i < 12; i++)
 		monthStartDates.push(new Date(PageStateManager.yearStart, i, 1));
 	for (var i = 0; i < 5; i++)
@@ -20,24 +18,8 @@ MonthsForClassViewModel = function (selectedClass, myLog) {
 	
     self.months = ko.observableArray(monthStartDates);
         
-    self.selectStudent = function(selectedStudent) {
-        
-        PageStateManager.changePage('student.html', new StudentViewModel(selectedStudent));
-    };
-
-	self.selectMonth = function(selectedMonth) {
+    self.selectMonth = function(selectedMonth) {
         
         PageStateManager.changePage('month.html', new MonthViewModel(self.selectedClass, selectedMonth));
     };
-	
-//	DbFuncs.loadClassStudents(self.selectedClass, function(data) { 
-//		try 
-//		{
-//			self.students(data); 
-//		} 
-//		catch (e)
-//		{
-//			self.log(JSON.stringify(e));
-//		}
-//	});
 }

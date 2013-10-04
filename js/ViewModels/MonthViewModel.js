@@ -3,16 +3,10 @@ MonthViewModel = function (selectedClass, firstDateOfMonth, myLog) {
 	self = this;
 	
 	self.selectedClass = PageStateManager.currentClass = selectedClass || PageStateManager.currentClass;
-//	if (selectedClass) 
-//		PageStateManager.currentClass = selectedClass;
 	
 	self.firstDateOfMonth = PageStateManager.firstDayOfCurrentMonth = firstDateOfMonth || PageStateManager.firstDayOfCurrentMonth;
-//	if (firstDateOfMonth) 
-//		PageStateManager.firstDayOfCurrentMonth = firstDateOfMonth;
 	
-	self.log = myLog || function(err) { 
-			console.log(err); 
-		};
+	self.log = myLog || function(err) { console.log(err); };
 		
     self.daysWithAbsences = ko.observableArray();
     self.newDate = ko.observable(self.firstDateOfMonth);
@@ -61,9 +55,9 @@ MonthViewModel = function (selectedClass, firstDateOfMonth, myLog) {
 		var allowedDates = validDaysInMonth(self.daysWithAbsences, self.firstDateOfMonth);
 			
 		setTimeout(function() { 
-			$("#add-date").data('mobileDatebox').options.enableDates = allowedDates;
-			$("#add-date").data('mobileDatebox').options.highDates = allowedDates;
-			$('#add-date').datebox('refresh'); 
+			$("#select-date").data('mobileDatebox').options.enableDates = allowedDates;
+			$("#select-date").data('mobileDatebox').options.highDates = allowedDates;
+			$('#select-date').datebox('refresh'); 
 		}, 500);
 	};
 	

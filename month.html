@@ -1,10 +1,6 @@
 <!DOCTYPE HTML>
 <html>
 
-<head>
-<title>Επιλογή Ημερομηνίας</title>
-</head>
-
 <body>
 	
 	<div id="info-page" data-role="page" data-viewModel="MonthViewModel">
@@ -12,20 +8,21 @@
 	<div data-role="header" data-bind='text: selectedClass.classId + " " + new JsSimpleDateFormat("MMMM yyyy", "el").format(firstDateOfMonth)' 
 		 style="text-align: center;"></div>
 
-	<div data-role="content">
+	<div id="month-content" data-role="content">
 
-	<!-- Add anything new in this segment -->
-
-	<div data-role="collapsible" data-collapsed="false" data-inset="false">
-		
-		<h4>Επιλέξτε Ημερομηνία.</h4>
-		
-		<input type="date" id="add-date"
-			data-role="datebox" data-options='{"mode": "calbox"}'  
-			data-bind="dateBoxValue: newDate" />
-		<!--</form>-->
-		<input type="button" value="Εισαγωγή" data-bind="click: addDay" />
-		<hr>
+		<table style="width: 100%">
+			<tr>
+				<td style="width: 75%">
+					<input type="date" id="select-date"
+						data-role="datebox" data-options='{"mode": "calbox"}'  
+						data-bind="dateBoxValue: newDate" />			
+				</td>
+				<td style="width: 25%">
+					<input type="button" id="add-date-button" value="Εισαγωγή" data-bind="click: addDay" />			
+				</td>
+			</tr>
+		</table>
+		<br>
 		<ul data-role="listview" 
 			data-bind="foreach: daysWithAbsences">
 			<li>
@@ -33,10 +30,6 @@
 			</li>
 		</ul>
 		
-	</div>
-	
-	<!-- End of additions area -->
-
 	</div>
 		
 	</div>
