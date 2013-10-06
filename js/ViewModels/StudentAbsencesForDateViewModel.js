@@ -52,21 +52,21 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
                 self.absences[4](), self.absences[5](), self.absences[6]());
 
             $.mobile.loading('show');
-            if (isNewEntity())
+            if (self.isNewEntity())
                 DbFuncs.saveNewAbsences(o, 
                     function() {
                         absencesOriginal = o;
                         $.mobile.loading('hide');
                     },
                     function(e) {$.mobile.loading('hide'); alert(e);});
-            else if (isModifiedEntity())
+            else if (self.isModifiedEntity())
                 DbFuncs.updateAbsences(o, 
                     function() {
                         absencesOriginal = o;
                         $.mobile.loading('hide');
                     },
                     function(e) {$.mobile.loading('hide'); alert(e);});
-            else if (isDeletedEntity())
+            else if (self.isDeletedEntity())
                 DbFuncs.deleteAbsences(o, 
                     function() {
                         absencesOriginal = undefined;
@@ -82,7 +82,7 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
         }
     };
 
-    var isNewEntity = function() {
+    self.isNewEntity = function() {
         return absencesOriginal && 
             _.every(Object.keys(absencesOriginal), function (a) { 
                     return !/h[1-7]/.test(a) || (absencesOriginal[a] === 0); 
@@ -90,14 +90,14 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
             _.some(self.absences, function (a) { return a() !== 0; });
     };
 
-    var isModifiedEntity = function() {
+    self.isModifiedEntity = function() {
         return absencesOriginal && 
             _.some(Object.keys(absencesOriginal), function (a) { 
-                    return /h[1-7]/.test(a) && (absencesOriginal[a] !== self.absences[a.substring(1)]()); 
+                    return /h[1-7]/.test(a) && (absencesOriginal[a] !== self.absences[a.substring(1)-1]()); 
                 });
     };
 
-    var isDeletedEntity = function() {
+    self.isDeletedEntity = function() {
         return absencesOriginal && 
             _.some(Object.keys(absencesOriginal), function (a) { 
                   return /h[1-7]/.test(a) && (absencesOriginal[a] !== 0); 

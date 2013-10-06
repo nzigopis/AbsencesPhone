@@ -4,10 +4,12 @@ DbPersistence = (function() {
         var insertIntoLogSql = 'INSERT INTO ABSENCES_LOG (studentId,absencesDate,h1,h2,h3,h4,h5,h6,h7,stmtType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         var updateLogSql = 'UPDATE ABSENCES_LOG SET h1=?,h2=?,h3=?,h4=?,h5=?,h6=?,h7=?,stmtType=? WHERE studentId=? AND absencesDate=?';
         var findLogEntrySql = 'SELECT * FROM ABSENCES_LOG WHERE studentId = ? AND absencesDate = ?';
-        var updateValues = [logValues.slice(2), logValues[0], logValues[1]];
+        var updateValues = logValues.slice(2);
+        updateValues.push(logValues[0]);
+        updateValues.push(logValues[1]);
         
         tx.executeSql(findLogEntrySql, [logValues[0], logValues[1]],
-            function() {
+            function(tx, results) {
                 if (results.rows.length === 0)
                     tx.executeSql(insertIntoLogSql, logValues,
                         function() { successCallback(); },

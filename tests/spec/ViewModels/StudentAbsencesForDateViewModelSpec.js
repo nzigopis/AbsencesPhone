@@ -19,7 +19,8 @@ describe("StudentAbsencesForDateViewModel Tests", function () {
                 successCallback(a1);
             }
         };
-        $ = {mobile: { loading: function() {} }};
+        $ = function() {};
+        $.mobile = { loading: function() {} };
 
     });
     
@@ -64,6 +65,18 @@ describe("StudentAbsencesForDateViewModel Tests", function () {
 
             o = svm.getOriginal();
             expect(o.h1).toEqual(AbsenceEnum.UNEXCUSED_FIRST);
+        });
+
+    });
+    
+    describe("Absences State Tests", function () {
+
+        it("Absences should be unmodified", function () {
+            a1.h1 = AbsenceEnum.UNEXCUSED_FIRST;
+            var svm = new StudentAbsencesForDateViewModel(d1, s1, undefined, true);
+            expect(svm.isNewEntity()).toBe(false);
+            expect(svm.isDeletedEntity()).toBe(false);
+            expect(svm.isModifiedEntity()).toBe(false);
         });
 
     });
