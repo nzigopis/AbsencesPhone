@@ -1,44 +1,74 @@
-describe("Absence Type Modification Tests", function () {
-    
+describe("StudentAbsencesForDateViewModel Tests", function () {
     beforeEach(function () {
-        status = null;
-        data = null;
+        
+        d1 = new Date(2013, 0, 1);
+        s1 = new Student(100, 'nikos', 'zigo');
+        a1 = new Absences(s1.studentId, s1, 0, 0, 0, 0, 0, 0, 0);
+        
+        DbFuncs = {
+            saveNewAbsences: function(a,s,f) {
+                s();
+            },
+            updateAbsences: function(a,s,f) {
+                s();
+            },
+            deleteAbsences: function(a,s,f) {
+                s();
+            },
+            loadStudentAbsencesForDate: function (student, forDate, successCallback) {
+                successCallback(a1);
+            }
+        };
+        $ = {mobile: { loading: function() {} }};
+
+    });
+    
+    describe("Absence Type Modification Tests", function () {
+
+        it("setting 2nd hour as first absence, should set 1st hour as not absent", function () {
+            a1.h1 = AbsenceEnum.UNEXCUSED_FIRST;
+            var svm = new StudentAbsencesForDateViewModel(d1, s1, undefined, true);
+
+            // Set second absence as first hour 
+            svm.absences[1](AbsenceEnum.UNEXCUSED_FIRST);
+
+            expect(svm.absences[0]()).toEqual(0);
+            expect(svm.absences[1]()).toEqual(AbsenceEnum.UNEXCUSED_FIRST);
+        });
+
+        it("setting 2nd hour as EXPELLED_DAILY should set 3..7th hours as EXPELLED_DAILY, too", function () {
+            a1.h3 = AbsenceEnum.UNEXCUSED_MIDDLE;
+            a1.h6 = AbsenceEnum.UNEXCUSED_MIDDLE;
+            var svm = new StudentAbsencesForDateViewModel(d1, s1, undefined, true);
+
+            // Set second absence as daily expulsion
+            svm.absences[1](AbsenceEnum.EXPELLED_DAILY);
+
+            for (var i = 1; i < 7; i++)
+                expect(svm.absences[i]()).toEqual(AbsenceEnum.EXPELLED_DAILY);
+        });
+
     });
 
-    it("should set 1..n-1 hours as not absent is n hour is first absence", function () {
+    describe("Save Absences to Db Tests", function () {
 
-		var d = new Date(2013, 0, 1);
-		var s = new Student(100, 'nikos', 'zigo');
-        vm = new StudentAbsencesForDateViewModel(d, s, function (student, forDate, successCallback) {
-			successCallback(new Absences(s.studentId, s, AbsenceEnum.UNEXCUSED_FIRST, 0, 0, 0, 0, 0, 0));
-			}, undefined, true);
+        it("should update absencesOriginal variable after successful DbFuncs.saveNewAbsences()", function () {
+            var svm = new StudentAbsencesForDateViewModel(d1, s1, undefined, true);
 
-		// Set second absence as first hour 
-        vm.absences[1](AbsenceEnum.UNEXCUSED_FIRST);
-		
-        expect(vm.absences[0]()).toEqual(0);
-		expect(vm.absences[1]()).toEqual(AbsenceEnum.UNEXCUSED_FIRST);
+            var o = svm.getOriginal();
+            expect(o.h1).toEqual(AbsenceEnum.NOT_ABSENT);
+
+            self.absences[0](AbsenceEnum.UNEXCUSED_FIRST);
+
+            svm.save();
+
+            o = svm.getOriginal();
+            expect(o.h1).toEqual(AbsenceEnum.UNEXCUSED_FIRST);
+        });
+
     });
-
-	it("should set N+1..7th hours as EXPELLED_DAILY if Nth hour is EXPELLED_DAILY", function () {
-
-		var d = new Date(2013, 0, 1);
-		var s = new Student(100, 'nikos', 'zigo');
-        vm = new StudentAbsencesForDateViewModel(d, s, function (student, forDate, successCallback) {
-			successCallback(new Absences(s.studentId, s, 0, 0, AbsenceEnum.UNEXCUSED_MIDDLE, 0, 0, AbsenceEnum.UNEXCUSED_MIDDLE, 0));
-			}, undefined, true);
-
-		// Set second absence as daily expulsion
-        vm.absences[1](AbsenceEnum.EXPELLED_DAILY);
-		
-		for (var i = 1; i < 7; i++)
-			expect(vm.absences[i]()).toEqual(AbsenceEnum.EXPELLED_DAILY);
-    });
-
 
 });
-
-
 //    it("should callback(SERVER_FILE_STATUS.MODIFIED, <new html data>) if file on server Modified", function () {
 //
 //        downloader = new FileDownloader(function () {
