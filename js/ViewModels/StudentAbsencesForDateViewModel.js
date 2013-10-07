@@ -42,8 +42,8 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
             self.absences[0](), self.absences[1](), self.absences[2](), self.absences[3](), 
             self.absences[4](), self.absences[5](), self.absences[6]());
     };
-
-    self.save = function() 
+	
+	self.save = function() 
     {
         try
         {
@@ -51,34 +51,28 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
                 self.absences[0](), self.absences[1](), self.absences[2](), self.absences[3](), 
                 self.absences[4](), self.absences[5](), self.absences[6]());
 
+			var succeededCallback = function() {
+				absencesOriginal = o;
+				$.mobile.loading('hide');
+			};
+			var errorCallback = function(e) {
+				$.mobile.loading('hide');
+				myLog(e);
+			};
+			
             $.mobile.loading('show');
             if (self.isNewEntity())
-                DbFuncs.saveNewAbsences(o, 
-                    function() {
-                        absencesOriginal = o;
-                        $.mobile.loading('hide');
-                    },
-                    function(e) {$.mobile.loading('hide'); alert(e);});
+                DbFuncs.saveNewAbsences(o, succeededCallback, errorCallback);
             else if (self.isModifiedEntity())
-                DbFuncs.updateAbsences(o, 
-                    function() {
-                        absencesOriginal = o;
-                        $.mobile.loading('hide');
-                    },
-                    function(e) {$.mobile.loading('hide'); alert(e);});
+                DbFuncs.updateAbsences(o, succeededCallback, errorCallback);
             else if (self.isDeletedEntity())
-                DbFuncs.deleteAbsences(o, 
-                    function() {
-                        absencesOriginal = undefined;
-                        $.mobile.loading('hide');
-                    },
-                    function(e) {$.mobile.loading('hide'); alert(e);});
+                DbFuncs.deleteAbsences(o, succeededCallback, errorCallback);
             else
                 $.mobile.loading('hide');
         }
         catch(err)
         {
-            alert(err);
+            myLog(err);
         }
     };
 

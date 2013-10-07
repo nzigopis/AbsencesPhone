@@ -71,7 +71,7 @@ describe("StudentAbsencesForDateViewModel Tests", function () {
     
     describe("Absences State Tests", function () {
 
-        it("Absences should be unmodified", function () {
+        it("Absences loaded but not processed yet, should be unmodified", function () {
             a1.h1 = AbsenceEnum.UNEXCUSED_FIRST;
             var svm = new StudentAbsencesForDateViewModel(d1, s1, undefined, true);
             expect(svm.isNewEntity()).toBe(false);
@@ -82,50 +82,3 @@ describe("StudentAbsencesForDateViewModel Tests", function () {
     });
 
 });
-//    it("should callback(SERVER_FILE_STATUS.MODIFIED, <new html data>) if file on server Modified", function () {
-//
-//        downloader = new FileDownloader(function () {
-//            return getXhrMock(4, 200, new Date(), '<html></html>');
-//        });
-//
-//        runs(function () {
-//            downloader.download(callback, 'care.html', 'external_html', new Date(1970, 0, 1));
-//        });
-//
-//        waitsFor(function () {
-//            return status != null;
-//        }, "AJAX call", 3000);
-//
-//        runs(function () {
-//            expect(status).toEqual(SERVER_FILE_STATUS.MODIFIED);
-//            expect(data).toMatch(/<html>/);
-//        });
-//    });
-
-    // Mocks
-    //
-
-//    var downloader, status, data;
-//
-//    var callback = function (s, d) { status = s; data = d; };
-//
-//    var getXhrMock = function (mockState, mockStatus, mockFileModificationDate, mockData) {
-//        var xhr = {
-//            open: function (requestType, url, async) {
-//                xhr.mockData = { 'requestType': requestType, 'url': url, 'async': async };
-//            },
-//            readyState: 0,
-//            status: 0,
-//            onreadystatechange: null,
-//            getResponseHeader: function () { return mockFileModificationDate; },
-//            send: function () {
-//                xhr.readyState = mockState;
-//                xhr.status = mockStatus;
-//                xhr.responseText = mockData;
-//                // Simulate async call
-//                setTimeout(function () { xhr.onreadystatechange(); }, 20);
-//            }
-//        };
-//
-//        return xhr;
-//    };
