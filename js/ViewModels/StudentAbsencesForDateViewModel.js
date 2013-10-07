@@ -88,7 +88,8 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
         return absencesOriginal && 
             _.some(Object.keys(absencesOriginal), function (a) { 
                     return /h[1-7]/.test(a) && (absencesOriginal[a] !== self.absences[a.substring(1)-1]()); 
-                });
+                }) &&
+            _.some(self.absences, function (a) { return a() !== 0; });
     };
 
     self.isDeletedEntity = function() {
