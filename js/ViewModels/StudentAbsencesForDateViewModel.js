@@ -13,7 +13,7 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
     self.headerData = (selectedStudent ? selectedStudent.studentInfo() : '') + ' - ' +
         (selectedDate ? new JsSimpleDateFormat("dd/MMM/yyyy", "el").format(selectedDate) : '');
 	
-    self.log = myLog || function(err) { console.log(err); };
+    myLog = myLog || function(err) { console.log(err); };
 
     self.absenceName = function (a) {
         switch (a) {
@@ -157,7 +157,7 @@ StudentAbsencesForDateViewModel = function(selectedDate, selectedStudent,
             } 
             catch (e)
             {
-                self.log(JSON.stringify(e));
+                myLog(JSON.stringify(e));
             }
         });
 	

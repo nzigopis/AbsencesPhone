@@ -100,7 +100,7 @@ DbSync = (function () {
         successCallback = successCallback || function(data) {};
         errorCallback = errorCallback || function(e) { alert(JSON.stringify(e));};
 		
-		$.getJSON(Constants.SERVER_URL)
+		$.getJSON(Constants.SERVER_PULL_URL)
 			.done(function(data) {
 				var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
 				db.transaction(function (tx) {
@@ -111,8 +111,19 @@ DbSync = (function () {
 			}); 
 	};
 	
-    var push = function (user, pwd, dbSyncSuccess, dbSyncFail) {
-
+    var push = function (logData, user, pwd, successCallback, errorCallback) {
+		successCallback = successCallback || function(data) {};
+        errorCallback = errorCallback || function(e) { console.log(JSON.stringify(e));};
+		
+		$.post(Constants.SERVER_PUSH_URL, logData)
+			.done(function(data, textStatus, jqXHR) {
+				successCallback(data);
+			})
+			.fail(function(error) {
+				errorCallback('Πρόβλημα επικοινωνίας με το Server. Προσπαθείστε αργότερα!' + JSON.stringify(error));
+			});
+; 
+		
     };
 
     var dbSyncPublicMethods = { pull: pull, push: push };

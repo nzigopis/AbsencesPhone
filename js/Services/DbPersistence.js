@@ -1,6 +1,33 @@
 DbPersistence = (function() {
     var yyyyMMdd = new JsSimpleDateFormat('yyyy-MM-dd');
 	
+	var clearLog = function(allButThese) {
+		var db = openDatabase(Constants.DB_NAME, '1.0', 'Test DB', Constants.DB_SIZE);
+		db.transaction(function(tx) {
+			tx.executeSql('DELETE FROM ABSENCES_LOG WHERE ID NOT IN (?)', allButThese);
+		});
+	};
+	
+	var pushLogToServer = function(tx, successCallback) {
+		tx.executeSql('SELECT * FROM ABSENCES_LOG', [],
+            function(tx, results) {
+                if (results.rows.length === 0)
+					return;
+				var log = [];
+				for (var i = 0; i < results.rows.length; i++) 
+				{
+					var itm = results.rows.item(i);
+					log.push(new AbsencesLog(itm.id, itm.stmtType, itm.studentId, 
+						itm.absencesDate, itm.h1, itm.h2, itm.h3, itm.h4, itm.h5, itm.h6, itm.h7));
+				}
+				setTimeout(function() {
+					DbSync.push(log, PageStateManager.userName, PageStateManager.userPassword, clearLog);
+				}, 1000);				
+			});
+			
+		successCallback();
+	};
+	
     var updateLog = function(tx, absences, stmtType, successCallback, errorCallback) {
 		var d = yyyyMMdd.format(absences.absencesDate);
 		var findLogEntrySql = 'SELECT * FROM ABSENCES_LOG WHERE studentId = ? AND absencesDate = ?';
@@ -17,12 +44,12 @@ DbPersistence = (function() {
             function(tx, results) {
                 if (results.rows.length === 0)
                     tx.executeSql(insertIntoLogSql, insertIntoLogValues,
-                        function() { successCallback(); },
+                        function() { pushLogToServer(tx, successCallback); },
                         function(t1, e) { errorCallback(JSON.stringify(e)); }
                     );
                 else
                     tx.executeSql(updateLogSql, updateLogValues,
-                        function() { successCallback(); },
+                        function() { pushLogToServer(tx, successCallback); },
                         function(t1, e) { errorCallback(JSON.stringify(e)); }
                     );
             },
