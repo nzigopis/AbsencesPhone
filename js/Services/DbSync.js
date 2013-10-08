@@ -121,8 +121,7 @@ DbSync = (function () {
 			})
 			.fail(function(error) {
 				errorCallback('Πρόβλημα επικοινωνίας με το Server. Προσπαθείστε αργότερα!' + JSON.stringify(error));
-			});
-; 
+			}); 
 		
     };
 
