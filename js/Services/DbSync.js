@@ -115,7 +115,7 @@ DbSync = (function () {
 		successCallback = successCallback || function(data) {};
         errorCallback = errorCallback || function(e) { console.log(JSON.stringify(e));};
 		
-		$.post(Constants.SERVER_PUSH_URL, logData)
+		$.post(Constants.SERVER_PUSH_URL, JSON.stringify(logData))
 			.done(function(data, textStatus, jqXHR) {
 				successCallback(data);
 			})
